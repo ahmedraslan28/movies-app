@@ -7,7 +7,7 @@ import com.raslan.model.Role;
 import com.raslan.model.User;
 import com.raslan.repository.UserRepository;
 import com.raslan.security.jwt.JWTUtil;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService{
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
