@@ -3,13 +3,13 @@ package com.raslan.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Builder
-@Getter
 @Setter
-@NoArgsConstructor
+@Getter
 @AllArgsConstructor
 public class Movie {
     @Id
@@ -40,4 +40,7 @@ public class Movie {
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
     private List<Rate> rates ;
+    public Movie() {
+        rates = new ArrayList<>() ;
+    }
 }

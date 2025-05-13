@@ -1,8 +1,14 @@
 package com.raslan.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Rate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,5 +22,5 @@ public class Rate {
     @JoinColumn(nullable = false)
     private Movie movie ;
 
-
+    private Integer rateValue;
 }

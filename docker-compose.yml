@@ -1,0 +1,21 @@
+services:
+  dp:
+    image: mysql:latest
+    container_name: mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_USER: fawry
+      MYSQL_PASSWORD: fawry
+      MYSQL_DATABASE: movieApp
+    restart: unless-stopped
+    volumes:
+      - dp:/var/lib/mysql
+    networks:
+      - dp
+
+volumes:
+  dp:
+
+networks:
+  dp:
