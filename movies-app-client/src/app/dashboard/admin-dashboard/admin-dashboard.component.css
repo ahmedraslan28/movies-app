@@ -186,6 +186,28 @@ mat-paginator {
   font-weight: 500;
 }
 
+mat-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.toolbar-left,
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbar-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20px;
+  font-weight: 500;
+}
+
 /* Responsive adjustments */
 @media (max-width: 1200px) {
   .movies-grid {

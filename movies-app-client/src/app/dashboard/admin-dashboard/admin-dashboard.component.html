@@ -1,8 +1,22 @@
 <div class="admin-dashboard">
   <mat-toolbar color="primary">
-    <span>Admin Dashboard</span>
-    <span class="toolbar-spacer"></span>
-    <button mat-button routerLink="/movies">View Library</button>
+    <div class="toolbar-left">
+      <button mat-button routerLink="/movies">
+        <mat-icon>movie</mat-icon>
+        View Library
+      </button>
+      <button mat-button routerLink="/admin/movies/add">
+        <mat-icon>add</mat-icon>
+        Add Movie
+      </button>
+    </div>
+    <span class="toolbar-title">Admin Dashboard</span>
+    <div class="toolbar-right">
+      <button mat-button (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        Logout
+      </button>
+    </div>
   </mat-toolbar>
 
   <div class="content-container">

@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PageEvent } from '@angular/material/paginator';
+import { Router } from '@angular/router';
 import { MoviesService } from '../../services/movies.service';
+import { AuthService } from '../../services/auth.service';
 import { OmdbMovie } from '../../models/omdb.model';
 
 @Component({
@@ -21,6 +23,8 @@ export class AdminDashboardComponent implements OnInit {
 
   constructor(
     private moviesService: MoviesService,
+    private authService: AuthService,
+    private router: Router,
     private snackBar: MatSnackBar
   ) {}
 
@@ -37,7 +41,7 @@ export class AdminDashboardComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.loading = false;
-          console.log(response.Response)
+          console.log(response.Response);
           if (response.Response === 'True') {
             this.movies = response.Search;
             this.totalResults = parseInt(response.totalResults, 10);
@@ -114,5 +118,10 @@ export class AdminDashboardComponent implements OnInit {
         : `failed to add ${errorCount} movies`;
     this.snackBar.open(message, 'Close', { duration: 3000 });
     this.selectedMovies.clear();
+  }
+
+  logout(): void {
+    console.log('log out clicked');
+    this.authService.logout();
   }
 }
