@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -57,11 +58,15 @@ public class MovieController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<MovieResponse>> getAllMovies(@RequestParam(required = false) String title,
+    public ResponseEntity<Map<String, Object>> getAllMovies(@RequestParam(required = false) String title,
                                                             @RequestParam(defaultValue = "1") Integer page,
                                                             @RequestParam(defaultValue = "5") Integer size) {
+
+        Map<String, Object> mp = new HashMap<>() ;
         List<MovieResponse> movies = movieService.getAllMovies(title, page - 1, size);
-        return ResponseEntity.ok(movies);
+        mp.put("movies", movies) ;
+        mp.put("total", movies.size()) ;
+        return ResponseEntity.ok(mp);
     }
 
 
