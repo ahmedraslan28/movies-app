@@ -20,6 +20,7 @@
                 matInput
                 [formControl]="searchControl"
                 placeholder="Enter movie title"
+                (keyup.enter)="onSearch()"
               />
             </mat-form-field>
 
@@ -68,7 +69,7 @@
               <mat-card-header>
                 <mat-checkbox
                   [checked]="isSelected(movie)"
-                  (change)="toggleSelection(movie)"
+                  (change)="toggleSelection(movie, $event)"
                   color="primary"
                 >
                 </mat-checkbox>

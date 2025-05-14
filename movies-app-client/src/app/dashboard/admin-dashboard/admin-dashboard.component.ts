@@ -62,11 +62,14 @@ export class AdminDashboardComponent implements OnInit {
     this.onSearch();
   }
 
-  toggleSelection(movie: OmdbMovie): void {
-    if (this.selectedMovies.has(movie.imdbID)) {
-      this.selectedMovies.delete(movie.imdbID);
-    } else {
+  toggleSelection(movie: OmdbMovie, event: any = null): void {
+    // If event exists, use its checked state, otherwise toggle
+    const selected = event ? event.checked : !this.selectedMovies.has(movie.imdbID);
+    
+    if (selected) {
       this.selectedMovies.add(movie.imdbID);
+    } else {
+      this.selectedMovies.delete(movie.imdbID);
     }
   }
 
@@ -75,10 +78,13 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   selectAll(): void {
-    if (this.selectedMovies.size === this.movies.length) {
+    // Clear if all are selected, otherwise select all
+    const allSelected = this.movies.every(movie => this.selectedMovies.has(movie.imdbID));
+    
+    if (allSelected) {
       this.selectedMovies.clear();
     } else {
-      this.movies.forEach((movie) => this.selectedMovies.add(movie.imdbID));
+      this.movies.forEach(movie => this.selectedMovies.add(movie.imdbID));
     }
   }
 
