@@ -71,25 +71,25 @@ export class MovieDetailsComponent implements OnInit {
     });
   }
 
-  removeMovie(): void {
-    if (!this.movie || !this.isAdmin) return;
+  // removeMovie(): void {
+  //   if (!this.movie || !this.isAdmin) return;
 
-    if (confirm('Are you sure you want to remove this movie?')) {
-      this.moviesService.removeFromLibrary(this.movie.id).subscribe({
-        next: () => {
-          this.snackBar.open('Movie removed successfully', 'Close', {
-            duration: 2000,
-          });
-          this.router.navigate(['/movies']);
-        },
-        error: (error) => {
-          this.snackBar.open('Error removing movie', 'Close', {
-            duration: 3000,
-          });
-        },
-      });
-    }
-  }
+  //   if (confirm('Are you sure you want to remove this movie?')) {
+  //     this.moviesService.removeFromLibrary(this.movie.id).subscribe({
+  //       next: () => {
+  //         this.snackBar.open('Movie removed successfully', 'Close', {
+  //           duration: 2000,
+  //         });
+  //         this.router.navigate(['/movies']);
+  //       },
+  //       error: (error) => {
+  //         this.snackBar.open('Error removing movie', 'Close', {
+  //           duration: 3000,
+  //         });
+  //       },
+  //     });
+  //   }
+  // }
 
   goBack(): void {
     this.router.navigate(['/movies']);

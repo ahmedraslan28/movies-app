@@ -84,16 +84,15 @@ export class MovieListComponent implements OnInit {
         `Are you sure you want to delete ${this.selectedMovies.size} selected movies?`
       )
     ) {
-      const movieIds = Array.from(this.selectedMovies);
-      this.moviesService.removeMultipleFromLibrary(movieIds).subscribe({
-        next: () => {
-          this.snackBar.open('Selected movies removed successfully', 'Close', {
+      this.moviesService.deleteMovies([...this.selectedMovies]).subscribe({
+        next: (response) => {
+          this.snackBar.open(response.message, 'Close', {
             duration: 2000,
           });
           this.loadMovies();
         },
         error: (error: any) => {
-          this.snackBar.open('Error removing selected movies', 'Close', {
+          this.snackBar.open('Error in removing selected movies', 'Close', {
             duration: 3000,
           });
         },
@@ -101,14 +100,14 @@ export class MovieListComponent implements OnInit {
     }
   }
 
-  removeMovie(movieId: number, event: Event): void {
+  deleteMovie(movieId: number, event: Event): void {
     event.stopPropagation();
     if (!this.isAdmin) return;
 
     if (confirm('Are you sure you want to remove this movie?')) {
-      this.moviesService.removeFromLibrary(movieId).subscribe({
-        next: () => {
-          this.snackBar.open('Movie removed successfully', 'Close', {
+      this.moviesService.deleteMovie(movieId).subscribe({
+        next: (response) => {
+          this.snackBar.open(response.message, 'Close', {
             duration: 2000,
           });
           this.loadMovies();

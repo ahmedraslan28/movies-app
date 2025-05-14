@@ -81,21 +81,6 @@ public class MovieServiceImpl implements MovieService {
         return movies.stream().map(MovieMapper::toMovieResponse).toList();
     }
 
-    @Override
-    @Transactional
-    public void deleteMovies(List<Integer> moviesIds) {
-        if (moviesIds == null || moviesIds.isEmpty()) {
-            throw new RequestValidationException("Movies IDs are required");
-        }
-
-        List<Movie> existingMovies = movieRepository.findAllById(moviesIds);
-
-        if (existingMovies.size() != moviesIds.size()) {
-            throw new RequestValidationException("Some movie IDs do not exist");
-        }
-
-        movieRepository.deleteAll(existingMovies);
-    }
 
     @Override
     public MovieResponse getMovie(Integer id) {
@@ -139,5 +124,41 @@ public class MovieServiceImpl implements MovieService {
         movies = movieRepository.saveAll(movies);
         log.info(movies.toString());
         return movies.stream().map(MovieMapper::toMovieResponse).toList();
+    }
+
+    @Override
+    public MovieResponse addMovie(String imdbId) {
+        if (movieRepository.existsByImdbId(imdbId)) {
+            return null;
+        }
+
+        MovieResponse movie = getOmdbMovie(imdbId);
+        Movie movieEntity = MovieMapper.ToMovie(movie);
+        movieEntity = movieRepository.save(movieEntity);
+        return movie;
+    }
+
+    @Override
+    @Transactional
+    public void deleteMovies(List<Integer> moviesIds) {
+        if (moviesIds == null || moviesIds.isEmpty()) {
+            throw new RequestValidationException("Movies IDs are required");
+        }
+
+        List<Movie> existingMovies = movieRepository.findAllById(moviesIds);
+
+        if (existingMovies.size() != moviesIds.size()) {
+            throw new RequestValidationException("Some movie IDs do not exist");
+        }
+
+        movieRepository.deleteAll(existingMovies);
+    }
+
+    @Override
+    public void deleteMovie(Integer movieId) {
+        if (!movieRepository.existsById(movieId)) {
+            throw new ResourceNotFoundException("Movie not found");
+        }
+        movieRepository.deleteById(movieId);
     }
 }

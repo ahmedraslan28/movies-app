@@ -58,20 +58,19 @@
                 mat-stroked-button
                 color="warn"
                 *ngIf="isAdmin"
-                (click)="removeMovie(movie.id, $event)"
+                (click)="deleteMovie(movie.id, $event)"
                 class="remove-button"
               >
                 <mat-icon>delete_outline</mat-icon>
                 Delete from Library
               </button>
 
-              <div class="movie-selection" *ngIf="isAdmin">
+              <div class="movie-selection" (click)="toggleMovieSelection(movie.id, $event)" *ngIf="isAdmin">
                 <mat-checkbox
                   [checked]="isMovieSelected(movie.id)"
-                  (click)="toggleMovieSelection(movie.id, $event)"
                   color="primary"
                 >
-                  Select for deletion
+                  Select for patch deletion
                 </mat-checkbox>
               </div>
 

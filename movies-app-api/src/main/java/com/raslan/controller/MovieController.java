@@ -27,15 +27,6 @@ public class MovieController {
         return ResponseEntity.ok(movieService.getMoviesFromOMDB(searchParam, page));
     }
 
-    @GetMapping("/omdb/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> getOmdbMovie(@PathVariable String id) {
-
-        Object response = movieService.getOmdbMovie(id);
-
-        return ResponseEntity.ok(response);
-    }
-
     @PostMapping("")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<MovieResponse>> addMovies(@RequestBody List<String> imdbIds) {
@@ -43,14 +34,28 @@ public class MovieController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/addMovie")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<MovieResponse> addMovie(@RequestBody String imdbid) {
+        return ResponseEntity.ok(movieService.addMovie(imdbid));
+    }
 
-    @DeleteMapping("")
+
+
+
+    @PostMapping("/deletePatch")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Map<String, String>> deleteMovies(@RequestBody List<Integer> moviesIds) {
         movieService.deleteMovies(moviesIds);
         return ResponseEntity.ok(Map.of("message", "Movies deleted successfully"));
     }
 
+    @DeleteMapping("/{movieId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Map<String, String>> deleteMovie(@PathVariable Integer movieId) {
+        movieService.deleteMovie(movieId);
+        return ResponseEntity.ok(Map.of("message", "Movie deleted successfully"));
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<MovieResponse> getMovie(@PathVariable Integer id) {

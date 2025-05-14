@@ -42,15 +42,18 @@ export class MoviesService {
       }
     );
   }
+  deleteMovies(movieIds: number[]): Observable<{ message: string }> {
+  return this.http.post<{ message: string }>(
+    `${this.baseUrl}/movies/deletePatch`,
+    movieIds 
+  );
+}
 
-  removeFromLibrary(movieId: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/movies/${movieId}`);
-  }
-
-  removeMultipleFromLibrary(movieIds: number[]): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/movies`, {
-      body: movieIds,
-    });
+  deleteMovie(movieId: number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(
+      `${this.baseUrl}/movies/${movieId}`,
+      {}
+    );
   }
 
   rateMovie(movieId: number, rating: number): Observable<Movie> {
