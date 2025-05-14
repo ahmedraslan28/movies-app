@@ -1,0 +1,111 @@
+<div class="admin-dashboard">
+  <mat-toolbar color="primary">
+    <span>Admin Dashboard</span>
+    <span class="toolbar-spacer"></span>
+    <button mat-button routerLink="/movies">View Library</button>
+  </mat-toolbar>
+
+  <div class="content-container">
+    <div class="search-section">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Search Movies</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="search-form">
+            <mat-form-field appearance="outline" class="search-input">
+              <mat-label>Movie Title</mat-label>
+              <input
+                matInput
+                [formControl]="searchControl"
+                placeholder="Enter movie title"
+              />
+            </mat-form-field>
+
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="onSearch()"
+              [disabled]="loading"
+            >
+              <mat-icon>search</mat-icon>
+              Search
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="results-section" *ngIf="movies.length > 0">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Search Results</mat-card-title>
+          <mat-card-subtitle>Found {{ totalResults }} movies</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="actions-toolbar">
+            <button mat-button (click)="selectAll()">
+              {{
+                selectedMovies.size === movies.length
+                  ? "Deselect All"
+                  : "Select All"
+              }}
+            </button>
+            <button
+              mat-raised-button
+              color="primary"
+              [disabled]="selectedMovies.size === 0"
+              (click)="addSelectedMovies()"
+            >
+              Add Selected ({{ selectedMovies.size }})
+            </button>
+          </div>
+
+          <div class="movies-grid">
+            <mat-card class="movie-card" *ngFor="let movie of movies">
+              <mat-card-header>
+                <mat-checkbox
+                  [checked]="isSelected(movie)"
+                  (change)="toggleSelection(movie)"
+                  color="primary"
+                >
+                </mat-checkbox>
+              </mat-card-header>
+
+              <div class="movie-image">
+                <img
+                  [src]="
+                    !!movie.Poster && movie.Poster !== 'N/A'
+                      ? movie.Poster
+                      : 'https://placehold.co/400x600/cccccc/666666.png?text=No+Poster'
+                  "
+                  [alt]="movie.Title"
+                />
+              </div>
+
+              <mat-card-content>
+                <div>
+                  <h3>{{ movie.Title }}</h3>
+                  <div class="movie-meta">
+                    <span class="year">{{ movie.Year }}</span>
+                    <span class="type">{{ movie.Type | titlecase }}</span>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+
+          <mat-paginator
+            [length]="totalResults"
+            [pageSize]="pageSize"
+            [pageIndex]="currentPage - 1"
+            (page)="onPageChange($event)"
+          >
+          </mat-paginator>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

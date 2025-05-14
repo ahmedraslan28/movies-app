@@ -1,0 +1,100 @@
+<div class="movie-list">
+  <mat-toolbar color="primary">
+    <span>Movie Library</span>
+    <span class="toolbar-spacer"></span>
+    <button mat-button *ngIf="isAdmin" (click)="goToAdminDashboard()">
+      <mat-icon>add</mat-icon>
+      Add Movies
+    </button>
+  </mat-toolbar>
+
+  <div class="content-container">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>All Movies</mat-card-title>
+        <mat-card-subtitle *ngIf="totalMovies > 0">
+          Showing {{ pageSize }} of {{ totalMovies }} movies
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="movies-grid" *ngIf="movies.length > 0">
+          <mat-card
+            class="movie-card"
+            *ngFor="let movie of movies"
+            (click)="viewDetails(movie.id)"
+          >
+            <div class="movie-card-header">
+              <button
+                mat-icon-button
+                color="warn"
+                *ngIf="isAdmin"
+                (click)="removeMovie(movie.id, $event)"
+                class="remove-button"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+
+            <img
+              mat-card-image
+              [src]="movie.poster"
+              alt="{{ movie.title }}"
+              *ngIf="movie.poster !== 'N/A'"
+            />
+            <div class="no-poster" *ngIf="movie.poster === 'N/A'">
+              <mat-icon>movie</mat-icon>
+            </div>
+
+            <mat-card-content>
+              <h3>{{ movie.title }}</h3>
+              <p class="year">{{ movie.year }}</p>
+              <p class="type">{{ movie.type }}</p>
+
+              <div class="rating" *ngIf="movie.rating">
+                <span class="rating-label">Average Rating:</span>
+                <div class="stars">
+                  <mat-icon
+                    *ngFor="let star of [1, 2, 3, 4, 5]"
+                    [class.filled]="movie.rating >= star"
+                  >
+                    star
+                  </mat-icon>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <div class="no-movies" *ngIf="!loading && movies.length === 0">
+          <mat-icon>movie_off</mat-icon>
+          <p>No movies in the library</p>
+          <button
+            mat-raised-button
+            color="primary"
+            *ngIf="isAdmin"
+            (click)="goToAdminDashboard()"
+          >
+            Add Movies
+          </button>
+        </div>
+
+        <mat-spinner
+          *ngIf="loading"
+          diameter="40"
+          class="loading-spinner"
+        ></mat-spinner>
+
+        <mat-paginator
+          *ngIf="totalMovies > 0"
+          [length]="totalMovies"
+          [pageSize]="pageSize"
+          [pageIndex]="currentPage"
+          [pageSizeOptions]="[12, 24, 48]"
+          (page)="onPageChange($event)"
+        >
+        </mat-paginator>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
