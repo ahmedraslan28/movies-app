@@ -40,12 +40,6 @@
             *ngFor="let movie of movies"
             (click)="viewDetails(movie.id)"
           >
-            <mat-checkbox
-              *ngIf="isAdmin"
-              [checked]="isMovieSelected(movie.id)"
-              (click)="toggleMovieSelection(movie.id, $event)"
-              class="movie-checkbox"
-            ></mat-checkbox>
             <img
               mat-card-image
               [src]="movie.poster"
@@ -70,6 +64,16 @@
                 <mat-icon>delete_outline</mat-icon>
                 Delete from Library
               </button>
+
+              <div class="movie-selection" *ngIf="isAdmin">
+                <mat-checkbox
+                  [checked]="isMovieSelected(movie.id)"
+                  (click)="toggleMovieSelection(movie.id, $event)"
+                  color="primary"
+                >
+                  Select for deletion
+                </mat-checkbox>
+              </div>
 
               <div class="rating" *ngIf="movie.rating">
                 <span class="rating-label">Average Rating:</span>
