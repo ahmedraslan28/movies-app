@@ -47,6 +47,12 @@ export class MoviesService {
     return this.http.delete<void>(`${this.baseUrl}/movies/${movieId}`);
   }
 
+  removeMultipleFromLibrary(movieIds: number[]): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/movies`, {
+      body: movieIds,
+    });
+  }
+
   rateMovie(movieId: number, rating: number): Observable<Movie> {
     return this.http.post<Movie>(`${this.baseUrl}/movies/${movieId}/rate`, {
       rating,

@@ -8,6 +8,15 @@
     </div>
     <span class="toolbar-title">Movie Library</span>
     <div class="toolbar-right">
+      <button
+        mat-button
+        color="warn"
+        *ngIf="isAdmin && selectedMovies.size > 0"
+        (click)="deleteSelectedMovies()"
+      >
+        <mat-icon>delete</mat-icon>
+        Delete Selected ({{ selectedMovies.size }})
+      </button>
       <button mat-button *ngIf="isAdmin" (click)="goToAdminDashboard()">
         <mat-icon>add</mat-icon>
         Add Movies
@@ -31,6 +40,12 @@
             *ngFor="let movie of movies"
             (click)="viewDetails(movie.id)"
           >
+            <mat-checkbox
+              *ngIf="isAdmin"
+              [checked]="isMovieSelected(movie.id)"
+              (click)="toggleMovieSelection(movie.id, $event)"
+              class="movie-checkbox"
+            ></mat-checkbox>
             <img
               mat-card-image
               [src]="movie.poster"

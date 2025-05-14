@@ -18,6 +18,7 @@ export class MovieListComponent implements OnInit {
   currentPage = 0;
   pageSize = 12;
   isAdmin = false;
+  selectedMovies = new Set<number>();
 
   constructor(
     private moviesService: MoviesService,
@@ -34,6 +35,7 @@ export class MovieListComponent implements OnInit {
 
   loadMovies(): void {
     this.loading = true;
+    this.selectedMovies.clear(); // Clear selection when reloading movies
     this.moviesService
       .getLibraryMovies(this.currentPage + 1, this.pageSize)
       .subscribe({
@@ -59,6 +61,44 @@ export class MovieListComponent implements OnInit {
 
   viewDetails(movieId: number): void {
     this.router.navigate(['/movies', movieId]);
+  }
+
+  toggleMovieSelection(movieId: number, event: Event): void {
+    event.stopPropagation();
+    if (this.selectedMovies.has(movieId)) {
+      this.selectedMovies.delete(movieId);
+    } else {
+      this.selectedMovies.add(movieId);
+    }
+  }
+
+  isMovieSelected(movieId: number): boolean {
+    return this.selectedMovies.has(movieId);
+  }
+
+  deleteSelectedMovies(): void {
+    if (this.selectedMovies.size === 0) return;
+
+    if (
+      confirm(
+        `Are you sure you want to delete ${this.selectedMovies.size} selected movies?`
+      )
+    ) {
+      const movieIds = Array.from(this.selectedMovies);
+      this.moviesService.removeMultipleFromLibrary(movieIds).subscribe({
+        next: () => {
+          this.snackBar.open('Selected movies removed successfully', 'Close', {
+            duration: 2000,
+          });
+          this.loadMovies();
+        },
+        error: (error: any) => {
+          this.snackBar.open('Error removing selected movies', 'Close', {
+            duration: 3000,
+          });
+        },
+      });
+    }
   }
 
   removeMovie(movieId: number, event: Event): void {
