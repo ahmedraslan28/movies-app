@@ -30,24 +30,31 @@ export class MoviesService {
 
   getLibraryMovies(
     page: number = 1,
-    size: number = 10
+    size: number = 10,
+    title?: string
   ): Observable<{ movies: Movie[]; total: number }> {
+    const params: { [key: string]: string } = {
+      page: page.toString(),
+      size: size.toString(),
+    };
+
+    if (title) {
+      params['title'] = title;
+    }
+
     return this.http.get<{ movies: Movie[]; total: number }>(
       `${this.baseUrl}/movies`,
       {
-        params: {
-          page: page.toString(),
-          size: size.toString(),
-        },
+        params,
       }
     );
   }
   deleteMovies(movieIds: number[]): Observable<{ message: string }> {
-  return this.http.post<{ message: string }>(
-    `${this.baseUrl}/movies/deletePatch`,
-    movieIds 
-  );
-}
+    return this.http.post<{ message: string }>(
+      `${this.baseUrl}/movies/deletePatch`,
+      movieIds
+    );
+  }
 
   deleteMovie(movieId: number): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(

@@ -5,6 +5,8 @@ import { PageEvent } from '@angular/material/paginator';
 import { MoviesService } from '../../services/movies.service';
 import { Movie } from '../../models/movie.model';
 import { AuthService } from '../../services/auth.service';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-movie-list',
@@ -19,6 +21,9 @@ export class MovieListComponent implements OnInit {
   pageSize = 12;
   isAdmin = false;
   selectedMovies = new Set<number>();
+  searchQuery = '';
+  private searchSubject = new Subject<string>();
+  private searchTimeout: any;
 
   constructor(
     private moviesService: MoviesService,
@@ -27,17 +32,33 @@ export class MovieListComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.isAdmin = this.authService.isAdmin();
+
+    // Setup search with debounce
+    this.searchSubject
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe(() => {
+        this.currentPage = 0; // Reset to first page when searching
+        this.loadMovies();
+      });
   }
 
   ngOnInit(): void {
     this.loadMovies();
+  }
+  onSearch(query: string): void {
+    this.searchQuery = query;
+    clearTimeout(this.searchTimeout);
+    this.searchTimeout = setTimeout(() => {
+      this.currentPage = 0; // Reset to first page when searching
+      this.loadMovies();
+    }, 300); // 300ms debounce
   }
 
   loadMovies(): void {
     this.loading = true;
     this.selectedMovies.clear(); // Clear selection when reloading movies
     this.moviesService
-      .getLibraryMovies(this.currentPage + 1, this.pageSize)
+      .getLibraryMovies(this.currentPage + 1, this.pageSize, this.searchQuery)
       .subscribe({
         next: (response) => {
           this.movies = response.movies;

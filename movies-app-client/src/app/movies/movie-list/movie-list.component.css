@@ -204,3 +204,14 @@ mat-paginator {
   color: #303f9f;
   text-shadow: 0 0 0.5px rgba(48, 63, 159, 0.3);
 }
+
+.search-container {
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.search-field {
+  width: 100%;
+  max-width: 500px;
+}

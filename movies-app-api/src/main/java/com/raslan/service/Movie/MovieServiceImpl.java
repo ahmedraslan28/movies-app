@@ -92,13 +92,10 @@ public class MovieServiceImpl implements MovieService {
     public List<MovieResponse> getAllMovies(String title, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         if (title == null || title.isBlank()) {
-            List<MovieResponse> m = movieRepository.findAll(pageable).stream()
+
+            return movieRepository.findAll(pageable).stream()
                     .map(MovieMapper::toMovieResponse)
                     .toList();
-            ;
-
-
-            return m;
         }
 
         return movieRepository.findByTitleContainingIgnoreCase(title, pageable)
