@@ -5,6 +5,7 @@ services:
     ports:
       - "3307:3306"
     environment:
+      MYSQL_ROOT_PASSWORD: fawry
       MYSQL_USER: fawry
       MYSQL_PASSWORD: fawry
       MYSQL_DATABASE: movieApp

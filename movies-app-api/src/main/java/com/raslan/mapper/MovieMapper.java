@@ -11,7 +11,7 @@ public class MovieMapper {
                 .description(movieRequest.getDescription())
                 .poster(movieRequest.getPoster())
                 .genre(movieRequest.getGenre())
-                .imbdId(movieRequest.getImbdId())
+                .imdbId(movieRequest.getImdbId())
                 .director(movieRequest.getDirector())
                 .releaseYear(movieRequest.getReleaseYear())
                 .type(movieRequest.getType())
@@ -24,6 +24,23 @@ public class MovieMapper {
                 .description(movie.getDescription())
                 .genre(movie.getGenre())
                 .director(movie.getDirector())
+                .imdbId(movie.getImdbId())
+                .type(movie.getType())
+                .year(String.valueOf(movie.getReleaseYear()))
+                .poster(movie.getPoster())
+                .build();
+    }
+
+    public static Movie ToMovie(MovieResponse movieResponse) {
+        return Movie.builder()
+                .title(movieResponse.getTitle())
+                .description(movieResponse.getDescription())
+                .genre(movieResponse.getGenre())
+                .director(movieResponse.getDirector())
+                .imdbId(movieResponse.getImdbId())
+                .releaseYear((movieResponse.getYear()))
+                .poster(movieResponse.getPoster())
+                .type(movieResponse.getType())
                 .build();
     }
 }

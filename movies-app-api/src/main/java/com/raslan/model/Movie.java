@@ -33,10 +33,10 @@ public class Movie {
     private String director;
 
     @Column(nullable = false)
-    private String imbdId;
+    private String imdbId;
 
     @Column(name = "release_year", nullable = false)
-    private Integer releaseYear;
+    private String releaseYear;
 
     private String type ;
 

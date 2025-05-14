@@ -15,6 +15,8 @@ public class MovieResponse {
     private String description;
     private String genre;
     private String director;
+    private String imdbId;
     private String year;
     private String poster;
+    private String type ;
 }

@@ -2,24 +2,29 @@ package com.raslan.service.Movie;
 
 import com.raslan.dto.movie.MovieRequest;
 import com.raslan.dto.movie.MovieResponse;
+import com.raslan.dto.movie.OmdbMovieResponse;
+import com.raslan.dto.movie.OmdbSearchResponse;
 import com.raslan.exception.RequestValidationException;
 import com.raslan.exception.ResourceNotFoundException;
 import com.raslan.mapper.MovieMapper;
 import com.raslan.model.Movie;
 import com.raslan.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MovieServiceImpl implements MovieService {
     private final RestTemplate restTemplate;
     private final MovieRepository movieRepository;
@@ -31,32 +36,39 @@ public class MovieServiceImpl implements MovieService {
     private String omdb_key;
 
     @Override
-    public Object getMoviesFromOMDB(String searchParam, int page) {
+    public OmdbSearchResponse getMoviesFromOMDB(String searchParam, int page) {
         if (searchParam.isBlank()) {
             throw new RequestValidationException("Search param is required");
         }
 
-        try {
-            String url = api_url + "?apikey=" + omdb_key +
-                    "&s=" + searchParam +
-                    "&page=" + page;
-
-            return restTemplate.getForObject(url, Object.class);
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("no movies found");
-        }
+        String url = api_url + "?apikey=" + omdb_key + "&s=" + searchParam + "&page=" + page;
+        Map<String, Object> response = (Map<String, Object>) restTemplate.getForObject(url, Object.class);
+        return new OmdbSearchResponse().builder()
+                .Search((List<OmdbMovieResponse>) response.get("Search"))
+                .totalResults((String) response.get("totalResults"))
+                .Response((String) response.get("Response"))
+                .build();
     }
 
     @Override
-    public Object getOmdbMovie(String id) {
-        try {
-            String url = api_url + "?apikey=" + omdb_key + "&i=" + id;
-
-            return restTemplate.getForObject(url, Object.class);
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("Movie not found");
+    public MovieResponse getOmdbMovie(String id) {
+        String url = api_url + "?apikey=" + omdb_key + "&i=" + id;
+        Map<String, Object> response = (Map<String, Object>) restTemplate.getForObject(url, Object.class);
+        if (response.size() == 2) {
+            throw new ResourceNotFoundException((String) response.get("Error"));
         }
+        return new MovieResponse().builder()
+                .title((String) response.get("Title"))
+                .description((String) response.get("Plot"))
+                .poster((String) response.get("Poster"))
+                .genre((String) response.get("Genre"))
+                .director((String) response.get("Director"))
+                .imdbId((String) response.get("imdbID"))
+                .year((String) response.get("Year"))
+                .type((String) response.get("Type"))
+                .build();
     }
+
 
     @Override
     @Transactional
@@ -95,17 +107,37 @@ public class MovieServiceImpl implements MovieService {
     public List<MovieResponse> getAllMovies(String title, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         if (title == null || title.isBlank()) {
-            List<MovieResponse> m =  movieRepository.findAll(pageable).stream()
+            List<MovieResponse> m = movieRepository.findAll(pageable).stream()
                     .map(MovieMapper::toMovieResponse)
-                    .toList(); ;
+                    .toList();
+            ;
 
 
-            return m ;
+            return m;
         }
 
         return movieRepository.findByTitleContainingIgnoreCase(title, pageable)
                 .stream()
                 .map(MovieMapper::toMovieResponse)
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public List<MovieResponse> addMovies(List<String> imdbIds) {
+        List<Movie> movies = new ArrayList<>();
+
+        for (String id : imdbIds) {
+            if (movieRepository.existsByImdbId(id)) {
+                continue;
+            }
+
+            MovieResponse movie = getOmdbMovie(id);
+
+            movies.add(MovieMapper.ToMovie(movie));
+        }
+        movies = movieRepository.saveAll(movies);
+        log.info(movies.toString());
+        return movies.stream().map(MovieMapper::toMovieResponse).toList();
     }
 }

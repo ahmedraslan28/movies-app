@@ -37,6 +37,7 @@ export class AdminDashboardComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.loading = false;
+          console.log(response.Response)
           if (response.Response === 'True') {
             this.movies = response.Search;
             this.totalResults = parseInt(response.totalResults, 10);
@@ -64,6 +65,8 @@ export class AdminDashboardComponent implements OnInit {
 
   toggleSelection(movie: OmdbMovie, event: any = null): void {
     // If event exists, use its checked state, otherwise toggle
+
+    console.log(event);
     const selected = event
       ? event.checked
       : !this.selectedMovies.has(movie.imdbID);
@@ -93,35 +96,22 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   addSelectedMovies(): void {
-    const selectedMovies = this.movies.filter((movie) =>
-      this.selectedMovies.has(movie.imdbID)
-    );
-    let addedCount = 0;
-    let errorCount = 0;
-
-    selectedMovies.forEach((movie) => {
-      this.moviesService.addMovieToLibrary(movie).subscribe({
-        next: () => {
-          addedCount++;
-          if (addedCount + errorCount === selectedMovies.length) {
-            this.showResultMessage(addedCount, errorCount);
-          }
-        },
-        error: () => {
-          errorCount++;
-          if (addedCount + errorCount === selectedMovies.length) {
-            this.showResultMessage(addedCount, errorCount);
-          }
-        },
-      });
+    const len = this.selectedMovies.size;
+    this.moviesService.addMoviesToLibrary([...this.selectedMovies]).subscribe({
+      next: (response) => {
+        this.showResultMessage(len, 0);
+        this.selectedMovies.clear();
+      },
+      error: () => {
+        this.showResultMessage(0, len);
+      },
     });
   }
-
   private showResultMessage(addedCount: number, errorCount: number): void {
     const message =
       errorCount === 0
         ? `Successfully added ${addedCount} movies`
-        : `Added ${addedCount} movies, failed to add ${errorCount} movies`;
+        : `failed to add ${errorCount} movies`;
     this.snackBar.open(message, 'Close', { duration: 3000 });
     this.selectedMovies.clear();
   }

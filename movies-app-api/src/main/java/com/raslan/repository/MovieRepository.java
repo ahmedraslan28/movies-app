@@ -8,4 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface MovieRepository extends JpaRepository<Movie, Integer> {
     Page<Movie> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 
+    boolean existsByImdbId(String imdbId);
+
+
 }

@@ -24,19 +24,8 @@ export class MoviesService {
     });
   }
 
-  getMovieByImdbId(imdbId: string): Observable<OmdbMovie> {
-    return this.http.get<OmdbMovie>(`${this.baseUrl}/movies/omdb/${imdbId}`);
-  }
-
-  addMovieToLibrary(movie: OmdbMovie): Observable<Movie> {
-    const movieData = {
-      title: movie.Title,
-      year: movie.Year,
-      imdbId: movie.imdbID,
-      type: movie.Type,
-      poster: movie.Poster,
-    };
-    return this.http.post<Movie>(`${this.baseUrl}/movies`, movieData);
+  addMoviesToLibrary(imdbIds: string[]): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/movies`, imdbIds);
   }
 
   getLibraryMovies(

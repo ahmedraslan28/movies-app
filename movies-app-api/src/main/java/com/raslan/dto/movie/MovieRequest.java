@@ -15,7 +15,7 @@ public class MovieRequest {
     private String poster;
     private String genre;
     private String director;
-    private String imbdId;
-    private Integer releaseYear;
+    private String imdbId;
+    private String releaseYear;
     private String type;
 }
