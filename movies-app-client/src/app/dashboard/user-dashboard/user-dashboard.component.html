@@ -1,14 +1,16 @@
 <div class="user-dashboard">
-  <mat-toolbar color="primary">
+  <!-- <mat-toolbar color="primary">
     <span>Welcome, {{ userName }}</span>
     <span class="toolbar-spacer"></span>
     <button mat-button (click)="logout()">
       <mat-icon>logout</mat-icon>
       Logout
     </button>
-  </mat-toolbar>
+  </mat-toolbar> -->
 
-  <div class="content-container">
+  <app-movie-list/>
+
+  <!-- <div class="content-container">
     <mat-card class="movies-card">
       <mat-card-header>
         <mat-card-title>Your Movie Library</mat-card-title>
@@ -80,5 +82,5 @@
         </mat-paginator>
       </mat-card-content>
     </mat-card>
-  </div>
+  </div> -->
 </div>
