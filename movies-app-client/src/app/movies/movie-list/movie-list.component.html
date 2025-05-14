@@ -1,11 +1,17 @@
-<div class="movie-list">
-  <mat-toolbar color="primary">
-    <span>Movie Library</span>
-    <span class="toolbar-spacer"></span>
-    <button mat-button *ngIf="isAdmin" (click)="goToAdminDashboard()">
-      <mat-icon>add</mat-icon>
-      Add Movies
-    </button>
+<div class="movie-list">  <mat-toolbar color="primary">
+    <div class="toolbar-left">
+      <button mat-button (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        Logout
+      </button>
+    </div>
+    <span class="toolbar-title">Movie Library</span>
+    <div class="toolbar-right">
+      <button mat-button *ngIf="isAdmin" (click)="goToAdminDashboard()">
+        <mat-icon>add</mat-icon>
+        Add Movies
+      </button>
+    </div>
   </mat-toolbar>
 
   <div class="content-container">

@@ -85,4 +85,8 @@ export class MovieListComponent implements OnInit {
   goToAdminDashboard(): void {
     this.router.navigate(['/admin/dashboard']);
   }
+
+  logout(): void {
+    this.authService.logout();
+  }
 }

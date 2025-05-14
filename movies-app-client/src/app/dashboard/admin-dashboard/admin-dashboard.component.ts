@@ -53,7 +53,7 @@ export class AdminDashboardComponent implements OnInit {
         },
         error: (error) => {
           this.loading = false;
-          this.snackBar.open('Error searching movies', 'Close', {
+          this.snackBar.open('Error From Omdb server, click search again', 'Close', {
             duration: 3000,
           });
         },
@@ -121,7 +121,6 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   logout(): void {
-    console.log('log out clicked');
     this.authService.logout();
   }
 }
