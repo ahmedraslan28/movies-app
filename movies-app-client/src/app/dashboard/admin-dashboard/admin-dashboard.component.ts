@@ -64,8 +64,10 @@ export class AdminDashboardComponent implements OnInit {
 
   toggleSelection(movie: OmdbMovie, event: any = null): void {
     // If event exists, use its checked state, otherwise toggle
-    const selected = event ? event.checked : !this.selectedMovies.has(movie.imdbID);
-    
+    const selected = event
+      ? event.checked
+      : !this.selectedMovies.has(movie.imdbID);
+
     if (selected) {
       this.selectedMovies.add(movie.imdbID);
     } else {
@@ -79,12 +81,14 @@ export class AdminDashboardComponent implements OnInit {
 
   selectAll(): void {
     // Clear if all are selected, otherwise select all
-    const allSelected = this.movies.every(movie => this.selectedMovies.has(movie.imdbID));
-    
+    const allSelected = this.movies.every((movie) =>
+      this.selectedMovies.has(movie.imdbID)
+    );
+
     if (allSelected) {
       this.selectedMovies.clear();
     } else {
-      this.movies.forEach(movie => this.selectedMovies.add(movie.imdbID));
+      this.movies.forEach((movie) => this.selectedMovies.add(movie.imdbID));
     }
   }
 
