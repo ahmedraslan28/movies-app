@@ -18,7 +18,7 @@ export class MovieListComponent implements OnInit {
   loading = false;
   totalMovies = 0;
   currentPage = 0;
-  pageSize = 12;
+  pageSize = 9;
   isAdmin = false;
   selectedMovies = new Set<number>();
   searchQuery = '';
@@ -40,9 +40,9 @@ export class MovieListComponent implements OnInit {
     this.searchQuery = query;
     clearTimeout(this.searchTimeout);
     this.searchTimeout = setTimeout(() => {
-      this.currentPage = 0; // Reset to first page when searching
+      this.currentPage = 0; 
       this.loadMovies();
-    }, 300); // 300ms debounce
+    }, 300);
   }
 
   loadMovies(): void {

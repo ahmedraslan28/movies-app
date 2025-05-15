@@ -89,19 +89,20 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<MovieResponse> getAllMovies(String title, Integer page, Integer size) {
+    public Map<String, Object> getAllMovies(String title, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
+        List<MovieResponse> moviesResponse;
         if (title == null || title.isBlank()) {
-
-            return movieRepository.findAll(pageable).stream()
+            moviesResponse = movieRepository.findAll(pageable).stream()
+                    .map(MovieMapper::toMovieResponse)
+                    .toList();
+        } else {
+            moviesResponse = movieRepository.findByTitleContainingIgnoreCase(title, pageable)
+                    .stream()
                     .map(MovieMapper::toMovieResponse)
                     .toList();
         }
-
-        return movieRepository.findByTitleContainingIgnoreCase(title, pageable)
-                .stream()
-                .map(MovieMapper::toMovieResponse)
-                .toList();
+        return Map.of("movies", moviesResponse, "total", movieRepository.count());
     }
 
     @Override

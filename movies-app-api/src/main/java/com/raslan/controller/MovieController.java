@@ -66,12 +66,7 @@ public class MovieController {
     public ResponseEntity<Map<String, Object>> getAllMovies(@RequestParam(required = false) String title,
                                                             @RequestParam(defaultValue = "1") Integer page,
                                                             @RequestParam(defaultValue = "5") Integer size) {
-
-        Map<String, Object> mp = new HashMap<>() ;
-        List<MovieResponse> movies = movieService.getAllMovies(title, page - 1, size);
-        mp.put("movies", movies) ;
-        mp.put("total", movies.size()) ;
-        return ResponseEntity.ok(mp);
+        return ResponseEntity.ok(movieService.getAllMovies(title, page - 1, size));
     }
 
 

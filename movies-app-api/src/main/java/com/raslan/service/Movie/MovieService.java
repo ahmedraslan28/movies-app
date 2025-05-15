@@ -6,6 +6,7 @@ import com.raslan.dto.movie.OmdbSearchResponse;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MovieService {
 
@@ -15,7 +16,7 @@ public interface MovieService {
 
     List<MovieResponse> moviesPatchAdd(List<MovieRequest> movies);
 
-    List<MovieResponse> getAllMovies(String title, Integer page, Integer size);
+    Map<String, Object> getAllMovies(String title, Integer page, Integer size);
 
     MovieResponse getMovie(Integer id);
 
