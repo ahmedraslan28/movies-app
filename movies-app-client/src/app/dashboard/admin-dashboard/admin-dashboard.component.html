@@ -63,49 +63,79 @@
         <mat-card-content>
           <!-- Actions Toolbar -->
           <div class="actions-toolbar">
-            <button mat-button (click)="selectAll()">
-              {{ areAllCurrentPageMoviesSelected ? 'Deselect All' : 'Select All' }}
-            </button>
+            <div class="toolbar-left">              <button
+                mat-stroked-button
+                class="select-all-btn"
+                [disabled]="isAddingMovies"
+                (click)="selectAll()"
+              >
+                <mat-icon>{{
+                  areAllCurrentPageMoviesSelected
+                    ? "deselect_all"
+                    : "select_all"
+                }}</mat-icon>
+                {{
+                  areAllCurrentPageMoviesSelected
+                    ? "Deselect All"
+                    : "Select All"
+                }}
+              </button>
+            </div>
 
-            <button
-              mat-raised-button
-              color="primary"
-              [disabled]="selectedMovies.size === 0"
-              (click)="addSelectedMovies()"
-            >
-              Add Selected ({{ selectedMovies.size }})
-            </button>
+            <div class="toolbar-right">              <button
+                mat-raised-button
+                color="primary"
+                class="add-selected-btn"
+                [disabled]="selectedMovies.size === 0 || isAddingMovies"
+                (click)="addSelectedMovies()"
+              >
+                <mat-spinner
+                  *ngIf="isAddingMovies"
+                  diameter="20"
+                  class="button-spinner"
+                ></mat-spinner>
+                <span *ngIf="!isAddingMovies">
+                  <mat-icon>library_add</mat-icon>
+                  Add Selected ({{ selectedMovies.size }})
+                </span>
+              </button>
+            </div>
           </div>
-
           <!-- Movie Grid -->
           <div class="movies-grid">
             <mat-card class="movie-card" *ngFor="let movie of movies">
-              <mat-card-header>
-                <mat-checkbox
-                  [checked]="isSelected(movie)"
-                  (change)="toggleSelection(movie, $event.checked)"
-                  color="primary"
-                >
-                </mat-checkbox>
-              </mat-card-header>
-
-              <div class="movie-image">
-                <img
-                  [src]="
-                    movie.Poster && movie.Poster !== 'N/A'
-                      ? movie.Poster
-                      : 'https://placehold.co/400x600/cccccc/666666.png?text=No+Poster'
-                  "
-                  [alt]="movie.Title"
-                />
+              <img
+                mat-card-image
+                [src]="movie.Poster"
+                alt="{{ movie.Title }}"
+                *ngIf="movie.Poster && movie.Poster !== 'N/A'"
+              />
+              <div
+                class="no-poster"
+                *ngIf="!movie.Poster || movie.Poster === 'N/A'"
+              >
+                <mat-icon>movie</mat-icon>
               </div>
 
               <mat-card-content>
                 <h3>{{ movie.Title }}</h3>
-                <div class="movie-meta">
-                  <span class="year">{{ movie.Year }}</span>
-                  <span class="type">{{ movie.Type | titlecase }}</span>
-                </div>
+                <p class="year">{{ movie.Year }}</p>
+                <p class="type">{{ movie.Type | titlecase }}</p>
+                <button mat-raised-button color="primary" class="add-button">
+                  <mat-icon>add_circle</mat-icon>
+                  Add to Library
+                </button>
+
+                <button
+                  mat-stroked-button
+                  class="select-button"
+                  (click)="$event.stopPropagation(); toggleSelection(movie)"
+                >
+                  <mat-icon>{{
+                    isSelected(movie) ? "check_box" : "check_box_outline_blank"
+                  }}</mat-icon>
+                  Select for batch add
+                </button>
               </mat-card-content>
             </mat-card>
           </div>

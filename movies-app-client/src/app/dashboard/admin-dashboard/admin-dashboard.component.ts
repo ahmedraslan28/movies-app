@@ -15,6 +15,7 @@ import { OmdbMovie } from '../../models/omdb.model';
 export class AdminDashboardComponent implements OnInit {
   searchControl = new FormControl('');
   loading = false;
+  isAddingMovies = false;
   movies: OmdbMovie[] = [];
   selectedMovies = new Set<string>();
 
@@ -90,15 +91,21 @@ export class AdminDashboardComponent implements OnInit {
       ? this.movies.forEach((m) => this.selectedMovies.delete(m.imdbID))
       : this.movies.forEach((m) => this.selectedMovies.add(m.imdbID));
   }
-
   // ========== Add Movies ==========
   addSelectedMovies(): void {
     const movieIds = Array.from(this.selectedMovies);
     if (movieIds.length === 0) return;
 
+    this.isAddingMovies = true;
     this.moviesService.addMoviesToLibrary(movieIds).subscribe({
-      next: () => this.showResultMessage(movieIds.length, 0),
-      error: () => this.showResultMessage(0, movieIds.length),
+      next: () => {
+        this.isAddingMovies = false;
+        this.showResultMessage(movieIds.length, 0);
+      },
+      error: () => {
+        this.isAddingMovies = false;
+        this.showResultMessage(0, movieIds.length);
+      }
     });
   }
 
