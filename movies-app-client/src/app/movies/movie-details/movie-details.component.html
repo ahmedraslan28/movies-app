@@ -30,13 +30,15 @@
         <div class="details-section">
           <div class="movie-header">
             <h1 class="movie-title">{{ movie.title }}</h1>
-            <div class="movie-meta">
-              <span class="year-badge">{{ movie.year }}</span>
-              <span class="dot-divider">•</span>
-              <span class="type-badge">{{ movie.type }}</span>
-              <span class="dot-divider" *ngIf="movie.genre">•</span>
-              <span class="genre" *ngIf="movie.genre">{{ movie.genre }}</span>
-            </div>
+          </div>
+          <div class="movie-meta">
+            <span class="year-badge">{{ movie.year }}</span>
+            <span class="dot-divider">•</span>
+            <span class="type-badge">{{ movie.type }}</span>
+            <span class="dot-divider" *ngIf="movie.genre">•</span>
+            <span class="genre-badge" *ngIf="movie.genre">{{
+              movie.genre
+            }}</span>
           </div>
 
           <p class="movie-description" *ngIf="movie.description">
@@ -48,28 +50,37 @@
               <div class="stat-header">
                 <span class="stat-label">Rating</span>
                 <div class="stat-value">
-                  {{ movie.averageRating ? movie.averageRating.toFixed(1) : '0' }}
+                  {{
+                    movie.averageRating ? movie.averageRating.toFixed(1) : "0"
+                  }}
                   <span class="stat-max">/5</span>
                 </div>
                 <div class="stat-subtitle">
-                  {{ movie.ratingCount || 0 }} {{ movie.ratingCount === 1 ? 'rating' : 'ratings' }}
+                  {{ movie.ratingCount || 0 }}
+                  {{ movie.ratingCount === 1 ? "rating" : "ratings" }}
                 </div>
               </div>
             </div>
 
             <div class="stat-card user-rating-stat">
               <div class="stat-content">
-                <div class="rate-label">{{ userRating ? 'Your Rating' : 'Rate this Movie' }}</div>
+                <div class="rate-label">
+                  {{ userRating ? "Your Rating" : "Rate this Movie" }}
+                </div>
                 <div class="stars-container">
                   <button
                     mat-icon-button
                     *ngFor="let star of [1, 2, 3, 4, 5]"
-                    [color]="userRating >= star ? 'accent' : ''"
+                    [color]="userRating >= star ? 'warn' : ''"
                     (click)="onRateMovie(star)"
                     [disabled]="userRating > 0"
-                    [matTooltip]="userRating ? 'You have already rated this movie' : ''"
+                    [matTooltip]="
+                      userRating ? 'You have already rated this movie' : ''
+                    "
                   >
-                    <mat-icon>{{ userRating >= star ? 'star' : 'star_border' }}</mat-icon>
+                    <mat-icon>{{
+                      userRating >= star ? "star" : "star_border"
+                    }}</mat-icon>
                   </button>
                 </div>
                 <div class="user-rating-display" *ngIf="userRating">
