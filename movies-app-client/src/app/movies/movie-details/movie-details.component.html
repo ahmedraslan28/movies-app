@@ -14,8 +14,8 @@
       class="loading-spinner"
     ></mat-spinner>
 
-    <mat-card *ngIf="!loading && movie">
-      <div class="movie-content">
+    <mat-card *ngIf="!loading && movie" class="movie-card">
+      <div class="movie-header">
         <div class="poster-section">
           <img
             [src]="movie.poster"
@@ -26,110 +26,112 @@
           <div class="no-poster" *ngIf="movie.poster === 'N/A'">
             <mat-icon>movie</mat-icon>
           </div>
-
-          <div class="rating-section">
-            <h3>{{ userRating ? "Your Rating" : "Rate this movie" }}</h3>
-            <div class="stars">
-              <button
-                mat-icon-button
-                *ngFor="let star of [1, 2, 3, 4, 5]"
-                [color]="userRating >= star ? 'accent' : ''"
-                (click)="onRateMovie(star)"
-                [disabled]="userRating > 0"
-                [matTooltip]="
-                  userRating ? 'You have already rated this movie' : ''
-                "
-              >
-                <mat-icon>{{
-                  userRating >= star ? "star" : "star_border"
-                }}</mat-icon>
-              </button>
-            </div>
-            <div class="rating-stats">
-              <ng-container *ngIf="userRating > 0">
-                <p class="user-rating">Your rating: {{ userRating }} / 5</p>
-              </ng-container>
-              <p
-                class="current-rating"
-                *ngIf="movie.averageRating || movie.ratingCount"
-              >
-                Average Rating:
-                {{
-                  movie.averageRating ? movie.averageRating.toFixed(1) : "0"
-                }}
-                / 5
-                <span class="rating-count" *ngIf="movie.ratingCount">
-                  ({{ movie.ratingCount }}
-                  {{ movie.ratingCount === 1 ? "rating" : "ratings" }})
-                </span>
-              </p>
-              <p class="no-ratings" *ngIf="!movie.ratingCount">
-                No ratings yet
-              </p>
-            </div>
-          </div>
         </div>
 
-        <div class="details-section">
+        <div class="header-content">
           <h1>{{ movie.title }}</h1>
+          
           <div class="metadata">
             <span class="year-badge">{{ movie.year }}</span>
             <span class="divider">•</span>
             <span class="type-badge">{{ movie.type }}</span>
+            <span *ngIf="movie.genre" class="divider">•</span>
+            <span class="genre">{{ movie.genre }}</span>
           </div>
 
-          <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-            <mat-tab label="Overview">
-              <div class="tab-content">
-                <p *ngIf="movie.description">{{ movie.description }}</p>
-                <div class="plain-info">
-                  <p *ngIf="movie.director">
-                    <strong>Director:</strong> {{ movie.director }}
-                  </p>
-                  <p *ngIf="movie.genre">
-                    <strong>Genre:</strong> {{ movie.genre }}
-                  </p>
-                  <p *ngIf="movie.imdbId">
-                    <strong>IMDb ID:</strong> {{ movie.imdbId }}
-                  </p>
-                  <p *ngIf="movie.type">
-                    <strong>Type:</strong> {{ movie.type }}
-                  </p>
-                  <a
-                    mat-raised-button
-                    color="accent"
-                    [href]="'https://www.imdb.com/title/' + movie.imdbId"
-                    target="_blank"
-                    *ngIf="movie.imdbId"
-                    class="imdb-link"
-                  >
-                    <mat-icon>movie</mat-icon>
-                    View on IMDB
-                  </a>
+          <div class="rating-overview">
+            <div class="rating-summary" *ngIf="movie.averageRating || movie.ratingCount">
+              <div class="average-score">
+                <span class="score">{{ movie.averageRating ? movie.averageRating.toFixed(1) : '0' }}</span>
+                <span class="max">/5</span>
+              </div>
+              <div class="rating-details">
+                <div class="rating-count">
+                  {{ movie.ratingCount || 0 }} {{ movie.ratingCount === 1 ? 'rating' : 'ratings' }}
+                </div>
+                <div class="user-rating" *ngIf="userRating">
+                  Your rating: {{ userRating }}/5
                 </div>
               </div>
-            </mat-tab>
-            <mat-tab label="Ratings">
-              <div class="tab-content">
-                <div class="plain-info">
-                  <p *ngIf="userRating" class="user-rating-details">
-                    <strong>Your Rating:</strong> {{ userRating }}/5
-                  </p>
-                  <p class="average-rating-details">
-                    <strong>Average Rating:</strong>
-                    {{
-                      movie.averageRating
-                        ? movie.averageRating.toFixed(1)
-                        : "0"
-                    }}/5 ({{ movie.ratingCount || 0 }}
-                    {{ movie.ratingCount === 1 ? "rating" : "ratings" }})
-                  </p>
-                </div>
+            </div>
+
+            <div class="rating-section">
+              <p class="rate-label">{{ userRating ? 'Your Rating' : 'Rate this movie' }}</p>
+              <div class="stars">
+                <button
+                  mat-icon-button
+                  *ngFor="let star of [1, 2, 3, 4, 5]"
+                  [color]="userRating >= star ? 'accent' : ''"
+                  (click)="onRateMovie(star)"
+                  [disabled]="userRating > 0"
+                  [matTooltip]="userRating ? 'You have already rated this movie' : ''"
+                >
+                  <mat-icon>{{ userRating >= star ? 'star' : 'star_border' }}</mat-icon>
+                </button>
               </div>
-            </mat-tab>
-          </mat-tab-group>
+            </div>
+          </div>
+
+          <div class="movie-actions">
+            <a
+              mat-raised-button
+              color="accent"
+              [href]="'https://www.imdb.com/title/' + movie.imdbId"
+              target="_blank"
+              *ngIf="movie.imdbId"
+            >
+              <mat-icon>movie</mat-icon>
+              View on IMDB
+            </a>
+          </div>
         </div>
       </div>
+
+      <mat-divider class="section-divider"></mat-divider>
+
+      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+        <mat-tab label="Overview">
+          <div class="tab-content">
+            <p *ngIf="movie.description" class="movie-description">
+              {{ movie.description }}
+            </p>
+            <div class="movie-info-grid">
+              <div class="info-item" *ngIf="movie.director">
+                <span class="info-label">Director</span>
+                <span class="info-value">{{ movie.director }}</span>
+              </div>
+              <div class="info-item" *ngIf="movie.type">
+                <span class="info-label">Type</span>
+                <span class="info-value">{{ movie.type }}</span>
+              </div>
+              <div class="info-item" *ngIf="movie.imdbId">
+                <span class="info-label">IMDb ID</span>
+                <span class="info-value">{{ movie.imdbId }}</span>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Ratings">
+          <div class="tab-content">
+            <div class="ratings-detail">
+              <div class="rating-stat" *ngIf="userRating">
+                <span class="stat-label">Your Rating</span>
+                <div class="stat-value highlighted">{{ userRating }}/5</div>
+              </div>
+              <div class="rating-stat">
+                <span class="stat-label">Average Rating</span>
+                <div class="stat-value">
+                  {{ movie.averageRating ? movie.averageRating.toFixed(1) : '0' }}/5
+                </div>
+                <span class="stat-subtitle">
+                  {{ movie.ratingCount || 0 }} {{ movie.ratingCount === 1 ? 'rating' : 'ratings' }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
     </mat-card>
   </div>
 </div>

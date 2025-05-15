@@ -21,6 +21,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDividerModule } from '@angular/material/divider';
 
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
@@ -49,8 +50,7 @@ import { MovieDetailsComponent } from './movies/movie-details/movie-details.comp
     MatButtonModule,
     MatCardModule,
     MatInputModule,
-    MatFormFieldModule,
-    MatToolbarModule,
+    MatFormFieldModule,    MatToolbarModule,
     MatIconModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
@@ -58,8 +58,10 @@ import { MovieDetailsComponent } from './movies/movie-details/movie-details.comp
     MatPaginatorModule,
     MatTabsModule,
     MatTooltipModule,
+    MatDividerModule,
     MatTabsModule,
     MatTooltipModule,
+    MatDividerModule,
   ],
   providers: [
     {
