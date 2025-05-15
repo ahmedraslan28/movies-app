@@ -9,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(name = "rate", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "movie_id"})})
 public class Rate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
