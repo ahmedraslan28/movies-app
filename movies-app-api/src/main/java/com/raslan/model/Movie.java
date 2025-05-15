@@ -25,7 +25,7 @@ public class Movie {
     @Column(nullable = false)
     private String description;
 
-    private String poster ;
+    private String poster;
 
     private String genre;
 
@@ -38,11 +38,20 @@ public class Movie {
     @Column(name = "release_year", nullable = false)
     private String releaseYear;
 
-    private String type ;
+    private String type;
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
-    private List<Rate> rates ;
+    private List<Rate> rates;
+
+    @Column(name = "rating_count")
+    private Integer ratingCount;
+
+    @Column(name = "average_rating")
+    private Double averageRating;
+
     public Movie() {
-        rates = new ArrayList<>() ;
+        rates = new ArrayList<>();
+        this.ratingCount = 0;
+        this.averageRating = 0.0;
     }
 }

@@ -43,7 +43,7 @@ public class MovieServiceImpl implements MovieService {
 
         String url = api_url + "?apikey=" + omdb_key + "&s=" + searchParam + "&page=" + page;
         Map<String, Object> response = (Map<String, Object>) restTemplate.getForObject(url, Object.class);
-        return new OmdbSearchResponse().builder()
+        return OmdbSearchResponse.builder()
                 .Search((List<OmdbMovieResponse>) response.get("Search"))
                 .totalResults((String) response.get("totalResults"))
                 .Response((String) response.get("Response"))
@@ -57,7 +57,7 @@ public class MovieServiceImpl implements MovieService {
         if (response.size() == 2) {
             throw new ResourceNotFoundException((String) response.get("Error"));
         }
-        return new MovieResponse().builder()
+        return MovieResponse.builder()
                 .title((String) response.get("Title"))
                 .description((String) response.get("Plot"))
                 .poster((String) response.get("Poster"))
@@ -132,7 +132,7 @@ public class MovieServiceImpl implements MovieService {
 
         MovieResponse movie = getOmdbMovie(imdbId);
         Movie movieEntity = MovieMapper.ToMovie(movie);
-        movieEntity = movieRepository.save(movieEntity);
+        movieRepository.save(movieEntity);
         return movie;
     }
 
@@ -158,5 +158,18 @@ public class MovieServiceImpl implements MovieService {
             throw new ResourceNotFoundException("Movie not found");
         }
         movieRepository.deleteById(movieId);
+    }
+
+    @Override
+    public void updateAverageRate(Movie movie, Integer rateValue) {
+        if (movie.getRatingCount() == null) {
+            movie.setRatingCount(0);
+            movie.setAverageRating(0.0);
+        }
+        Double totalRating = movie.getRatingCount() * movie.getAverageRating();
+        movie.setRatingCount(movie.getRatingCount() + 1);
+        totalRating += rateValue;
+        movie.setAverageRating(totalRating / movie.getRatingCount());
+        movieRepository.save(movie);
     }
 }

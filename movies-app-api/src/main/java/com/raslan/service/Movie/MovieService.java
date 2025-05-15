@@ -3,6 +3,7 @@ package com.raslan.service.Movie;
 import com.raslan.dto.movie.MovieRequest;
 import com.raslan.dto.movie.MovieResponse;
 import com.raslan.dto.movie.OmdbSearchResponse;
+import com.raslan.model.Movie;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
@@ -27,4 +28,6 @@ public interface MovieService {
     void deleteMovies(@RequestBody List<Integer> moviesIds);
 
     void deleteMovie(@RequestBody Integer moviesIds);
+
+    void updateAverageRate(Movie movie, Integer rateValue);
 }
