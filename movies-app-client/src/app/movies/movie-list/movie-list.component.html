@@ -92,17 +92,6 @@
                 </mat-checkbox>
               </div>
 
-              <div class="rating" *ngIf="movie.rating">
-                <span class="rating-label">Average Rating:</span>
-                <div class="stars">
-                  <mat-icon
-                    *ngFor="let star of [1, 2, 3, 4, 5]"
-                    [class.filled]="movie.rating >= star"
-                  >
-                    star
-                  </mat-icon>
-                </div>
-              </div>
             </mat-card-content>
           </mat-card>
         </div>

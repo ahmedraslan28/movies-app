@@ -5,8 +5,6 @@ import { PageEvent } from '@angular/material/paginator';
 import { MoviesService } from '../../services/movies.service';
 import { Movie } from '../../models/movie.model';
 import { AuthService } from '../../services/auth.service';
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-movie-list',
@@ -40,7 +38,7 @@ export class MovieListComponent implements OnInit {
     this.searchQuery = query;
     clearTimeout(this.searchTimeout);
     this.searchTimeout = setTimeout(() => {
-      this.currentPage = 0; 
+      this.currentPage = 0;
       this.loadMovies();
     }, 300);
   }

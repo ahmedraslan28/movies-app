@@ -32,11 +32,3 @@ public class MovieAppApplication {
 		};
 	}
 }
-
-/*
-user token : eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInN1YiI6ImFobWVkcmFzbG5AdC5jb20iLCJpc3MiOiJyZXNvLmNvbSIsImlhdCI6MTc0NzE3MjIyMCwiZXhwIjoxNzQ3MjU4NjIwfQ.48lTHNp4S6KEZa37KdOnNsWSYNO6f0qg7e5lrl2kF9s
-
-admin token :
-
-
- */

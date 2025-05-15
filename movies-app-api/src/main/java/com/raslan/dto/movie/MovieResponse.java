@@ -19,4 +19,6 @@ public class MovieResponse {
     private String year;
     private String poster;
     private String type ;
+    private Integer ratingCount ;
+    private Double averageRating ;
 }

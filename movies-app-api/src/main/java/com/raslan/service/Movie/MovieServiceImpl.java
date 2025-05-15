@@ -133,7 +133,7 @@ public class MovieServiceImpl implements MovieService {
         MovieResponse movie = getOmdbMovie(imdbId);
         Movie movieEntity = MovieMapper.ToMovie(movie);
         movieRepository.save(movieEntity);
-        return movie;
+        return MovieMapper.toMovieResponse(movieEntity);
     }
 
     @Override

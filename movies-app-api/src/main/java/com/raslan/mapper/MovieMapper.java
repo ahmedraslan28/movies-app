@@ -28,6 +28,8 @@ public class MovieMapper {
                 .type(movie.getType())
                 .year(String.valueOf(movie.getReleaseYear()))
                 .poster(movie.getPoster())
+                .ratingCount(movie.getRatingCount())
+                .averageRating(movie.getAverageRating())
                 .build();
     }
 

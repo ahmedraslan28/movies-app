@@ -8,5 +8,6 @@ export interface Movie {
   imdbId: string;
   type: string;
   poster: string;
-  rating?: number;
+  ratingCount: number;
+  averageRating: number;
 }

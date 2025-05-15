@@ -39,7 +39,7 @@ export class MovieDetailsComponent implements OnInit {
     this.moviesService.getMovieDetails(id).subscribe({
       next: (movie) => {
         this.movie = movie;
-        this.userRating = movie.rating || 0;
+        this.userRating = movie.averageRating || 0;
         this.loading = false;
       },
       error: (error) => {
