@@ -1,11 +1,15 @@
-<div class="admin-dashboard">  <mat-toolbar color="primary">
+<div class="admin-dashboard">
+  <!-- Toolbar -->
+  <mat-toolbar color="primary">
     <div class="toolbar-left">
       <button mat-button (click)="logout()">
         <mat-icon>logout</mat-icon>
         Logout
       </button>
     </div>
+
     <span class="toolbar-title">Admin Dashboard</span>
+
     <div class="toolbar-right">
       <button mat-button routerLink="/movies">
         <mat-icon>movie</mat-icon>
@@ -15,6 +19,7 @@
   </mat-toolbar>
 
   <div class="content-container">
+    <!-- Search Section -->
     <div class="search-section">
       <mat-card>
         <mat-card-header>
@@ -47,6 +52,7 @@
       </mat-card>
     </div>
 
+    <!-- Results Section -->
     <div class="results-section" *ngIf="movies.length > 0">
       <mat-card>
         <mat-card-header>
@@ -55,14 +61,12 @@
         </mat-card-header>
 
         <mat-card-content>
+          <!-- Actions Toolbar -->
           <div class="actions-toolbar">
             <button mat-button (click)="selectAll()">
-              {{
-                selectedMovies.size === movies.length
-                  ? "Deselect All"
-                  : "Select All"
-              }}
+              {{ areAllCurrentPageMoviesSelected ? 'Deselect All' : 'Select All' }}
             </button>
+
             <button
               mat-raised-button
               color="primary"
@@ -73,12 +77,13 @@
             </button>
           </div>
 
+          <!-- Movie Grid -->
           <div class="movies-grid">
             <mat-card class="movie-card" *ngFor="let movie of movies">
               <mat-card-header>
                 <mat-checkbox
                   [checked]="isSelected(movie)"
-                  (change)="toggleSelection(movie, $event)"
+                  (change)="toggleSelection(movie, $event.checked)"
                   color="primary"
                 >
                 </mat-checkbox>
@@ -87,7 +92,7 @@
               <div class="movie-image">
                 <img
                   [src]="
-                    !!movie.Poster && movie.Poster !== 'N/A'
+                    movie.Poster && movie.Poster !== 'N/A'
                       ? movie.Poster
                       : 'https://placehold.co/400x600/cccccc/666666.png?text=No+Poster'
                   "
@@ -96,17 +101,16 @@
               </div>
 
               <mat-card-content>
-                <div>
-                  <h3>{{ movie.Title }}</h3>
-                  <div class="movie-meta">
-                    <span class="year">{{ movie.Year }}</span>
-                    <span class="type">{{ movie.Type | titlecase }}</span>
-                  </div>
+                <h3>{{ movie.Title }}</h3>
+                <div class="movie-meta">
+                  <span class="year">{{ movie.Year }}</span>
+                  <span class="type">{{ movie.Type | titlecase }}</span>
                 </div>
               </mat-card-content>
             </mat-card>
           </div>
 
+          <!-- Paginator -->
           <mat-paginator
             [length]="totalResults"
             [pageSize]="pageSize"
