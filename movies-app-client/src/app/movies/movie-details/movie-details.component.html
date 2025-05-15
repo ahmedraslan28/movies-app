@@ -21,17 +21,10 @@
             [src]="movie.poster"
             alt="{{ movie.title }}"
             *ngIf="movie.poster !== 'N/A'"
+            class="movie-poster"
           />
           <div class="no-poster" *ngIf="movie.poster === 'N/A'">
             <mat-icon>movie</mat-icon>
-          </div>
-        </div>
-
-        <div class="details-section">
-          <h1>{{ movie.title }}</h1>
-          <div class="metadata">
-            <span class="year">{{ movie.year }}</span>
-            <span class="type">{{ movie.type }}</span>
           </div>
 
           <div class="rating-section">
@@ -43,25 +36,89 @@
                 [color]="userRating >= star ? 'accent' : ''"
                 (click)="onRateMovie(star)"
               >
-                <mat-icon>star</mat-icon>
+                <mat-icon>{{
+                  userRating >= star ? "star" : "star_border"
+                }}</mat-icon>
               </button>
             </div>
-            <p class="current-rating" *ngIf="movie.averageRating">
-              Average Rating: {{ movie.averageRating.toFixed(1) }} / 5
-            </p>
+            <div
+              class="rating-stats"
+              *ngIf="movie.averageRating || movie.ratingCount"
+            >
+              <p class="current-rating">
+                Average Rating:
+                {{
+                  movie.averageRating ? movie.averageRating.toFixed(1) : "0"
+                }}
+                / 5
+                <span class="rating-count" *ngIf="movie.ratingCount">
+                  ({{ movie.ratingCount }}
+                  {{ movie.ratingCount === 1 ? "rating" : "ratings" }})
+                </span>
+              </p>
+            </div>
+            <div class="rating-stats" *ngIf="!movie.ratingCount">
+              <p class="no-ratings">No ratings yet</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="details-section">
+          <h1>{{ movie.title }}</h1>
+          <div class="metadata">
+            <span class="year-badge">{{ movie.year }}</span>
+            <span class="divider">•</span>
+            <span class="type-badge">{{ movie.type }}</span>
           </div>
 
-          <div class="movie-info" *ngIf="movie.imdbId">
-            <a
-              mat-raised-button
-              color="accent"
-              [href]="'https://www.imdb.com/title/' + movie.imdbId"
-              target="_blank"
-            >
-              <mat-icon>movie</mat-icon>
-              View on IMDB
-            </a>
-          </div>
+          <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+            <mat-tab label="Overview">
+              <div class="tab-content">
+                <p *ngIf="movie.description">{{ movie.description }}</p>
+                <div class="plain-info">
+                  <p *ngIf="movie.director">
+                    <strong>Director:</strong> {{ movie.director }}
+                  </p>
+                  <p *ngIf="movie.genre">
+                    <strong>Genre:</strong> {{ movie.genre }}
+                  </p>
+                  <p *ngIf="movie.imdbId">
+                    <strong>IMDb ID:</strong> {{ movie.imdbId }}
+                  </p>
+                  <p *ngIf="movie.type">
+                    <strong>Type:</strong> {{ movie.type }}
+                  </p>
+                  <a
+                    mat-raised-button
+                    color="accent"
+                    [href]="'https://www.imdb.com/title/' + movie.imdbId"
+                    target="_blank"
+                    *ngIf="movie.imdbId"
+                    class="imdb-link"
+                  >
+                    <mat-icon>movie</mat-icon>
+                    View on IMDB
+                  </a>
+                </div>
+              </div>
+            </mat-tab>
+
+            <mat-tab label="Ratings">
+              <div class="tab-content">
+                <div class="plain-info">
+                  <p>
+                    <strong>Average Rating:</strong>
+                    {{
+                      movie.averageRating
+                        ? movie.averageRating.toFixed(1)
+                        : "0"
+                    }}/5 ({{ movie.ratingCount || 0 }}
+                    {{ movie.ratingCount === 1 ? "rating" : "ratings" }})
+                  </p>
+                </div>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
         </div>
       </div>
     </mat-card>

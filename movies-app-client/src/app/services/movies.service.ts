@@ -63,12 +63,6 @@ export class MoviesService {
     );
   }
 
-  rateMovie(movieId: number, rating: number): Observable<Movie> {
-    return this.http.post<Movie>(`${this.baseUrl}/movies/${movieId}/rate`, {
-      rating,
-    });
-  }
-
   getMovieDetails(movieId: number): Observable<Movie> {
     return this.http.get<Movie>(`${this.baseUrl}/movies/${movieId}`);
   }

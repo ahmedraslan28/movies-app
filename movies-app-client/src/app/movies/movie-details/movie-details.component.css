@@ -17,28 +17,22 @@
   margin: 40px auto;
 }
 
+/* Movie Content Layout */
 .movie-content {
   display: flex;
-  flex-direction: row;
   gap: 32px;
   padding: 20px;
 }
 
-@media (max-width: 768px) {
-  .movie-content {
-    flex-direction: column;
-  }
-}
-
+/* Poster Section */
 .poster-section {
   flex: 0 0 300px;
 }
 
-.poster-section img {
+.movie-poster {
   width: 100%;
   max-width: 300px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
 }
 
 .no-poster {
@@ -48,81 +42,98 @@
   align-items: center;
   justify-content: center;
   background-color: #e0e0e0;
-  border-radius: 8px;
 }
 
 .no-poster mat-icon {
   font-size: 48px;
-  width: 48px;
-  height: 48px;
-  color: #999;
 }
 
+/* Rating Section */
+.rating-section {
+  margin: 20px 0;
+}
+
+.stars {
+  display: flex;
+  justify-content: center;
+}
+
+.current-rating {
+  margin: 10px 0;
+}
+
+.imdb-button {
+  width: 100%;
+}
+
+/* Details Section */
 .details-section {
   flex: 1;
 }
 
 h1 {
-  margin: 0 0 16px 0;
-  font-size: 32px;
-  color: #333;
+  margin: 0 0 10px 0;
+  font-size: 24px;
 }
 
 .metadata {
-  margin-bottom: 24px;
-}
-
-.year,
-.type {
-  display: inline-block;
-  padding: 4px 12px;
-  margin-right: 12px;
-  background-color: #e0e0e0;
-  border-radius: 16px;
-  font-size: 14px;
-  color: #666;
-}
-
-.rating-section {
-  margin: 24px 0;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.rating-section h3 {
-  margin: 0 0 16px 0;
-  color: #333;
-}
-
-.stars {
+  margin-bottom: 20px;
   display: flex;
+  align-items: center;
   gap: 8px;
-  margin-bottom: 16px;
 }
 
-.stars button {
-  width: 48px;
-  height: 48px;
+.year-badge {
+  background-color: #bbdefb;
+  color: #1565c0;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-weight: 500;
 }
 
-.stars mat-icon {
-  font-size: 32px;
-  width: 32px;
-  height: 32px;
+.type-badge {
+  background-color: #c8e6c9;
+  color: #2e7d32;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-weight: 500;
 }
 
-.current-rating {
-  margin-top: 12px;
-  text-align: center;
+.divider {
   color: #666;
 }
 
-.movie-info {
-  margin-top: 24px;
+/* Tab Content */
+.tab-content {
+  padding: 20px 0;
 }
 
-.movie-info a {
-  text-decoration: none;
+.plain-info {
+  margin-top: 20px;
+}
+
+.plain-info p {
+  margin: 10px 0;
+  line-height: 1.5;
+}
+
+.imdb-link {
+  margin-top: 20px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.imdb-link mat-icon {
+  margin-right: 8px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .movie-content {
+    flex-direction: column;
+  }
+
+  .poster-section {
+    margin: 0 auto;
+  }
 }

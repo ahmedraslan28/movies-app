@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MoviesService } from '../../services/movies.service';
+import { RateService } from '../../services/rate.service';
 import { Movie } from '../../models/movie.model';
 import { AuthService } from '../../services/auth.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-movie-details',
@@ -15,11 +17,14 @@ export class MovieDetailsComponent implements OnInit {
   loading = false;
   isAdmin = false;
   userRating = 0;
+  selectedTab = 0;
+  ratingInProgress = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private moviesService: MoviesService,
+    private rateService: RateService,
     private authService: AuthService,
     private snackBar: MatSnackBar
   ) {
@@ -39,8 +44,7 @@ export class MovieDetailsComponent implements OnInit {
     this.moviesService.getMovieDetails(id).subscribe({
       next: (movie) => {
         this.movie = movie;
-        this.userRating = movie.averageRating || 0;
-        this.loading = false;
+        this.loadUserRating(id);
       },
       error: (error) => {
         this.loading = false;
@@ -52,44 +56,47 @@ export class MovieDetailsComponent implements OnInit {
     });
   }
 
-  onRateMovie(rating: number): void {
-    if (!this.movie) return;
-
-    this.moviesService.rateMovie(this.movie.id, rating).subscribe({
-      next: (updatedMovie) => {
-        this.movie = updatedMovie;
+  loadUserRating(movieId: number): void {
+    this.rateService.getUserRating(movieId).subscribe({
+      next: (rating) => {
         this.userRating = rating;
-        this.snackBar.open('Rating updated successfully', 'Close', {
-          duration: 2000,
-        });
+        this.loading = false;
       },
-      error: (error) => {
-        this.snackBar.open('Error updating rating', 'Close', {
-          duration: 3000,
-        });
+      error: () => {
+        this.loading = false;
       },
     });
   }
 
-  // removeMovie(): void {
-  //   if (!this.movie || !this.isAdmin) return;
+  onRateMovie(rating: number): void {
+    if (!this.movie || this.ratingInProgress) return;
 
-  //   if (confirm('Are you sure you want to remove this movie?')) {
-  //     this.moviesService.removeFromLibrary(this.movie.id).subscribe({
-  //       next: () => {
-  //         this.snackBar.open('Movie removed successfully', 'Close', {
-  //           duration: 2000,
-  //         });
-  //         this.router.navigate(['/movies']);
-  //       },
-  //       error: (error) => {
-  //         this.snackBar.open('Error removing movie', 'Close', {
-  //           duration: 3000,
-  //         });
-  //       },
-  //     });
-  //   }
-  // }
+    const previousRating = this.userRating;
+    this.userRating = rating;
+    this.ratingInProgress = true;
+
+    this.rateService
+      .addRate(this.movie.id, rating)
+      .pipe(finalize(() => (this.ratingInProgress = false)))
+      .subscribe({
+        next: (updatedMovie) => {
+          this.movie = updatedMovie;
+          this.snackBar.open('Rating updated successfully', 'Close', {
+            duration: 2000,
+          });
+        },
+        error: (error) => {
+          this.userRating = previousRating; // Restore previous rating on error
+          this.snackBar.open('Error updating rating', 'Close', {
+            duration: 3000,
+          });
+        },
+      });
+  }
+
+  onTabChange(index: number): void {
+    this.selectedTab = index;
+  }
 
   goBack(): void {
     this.router.navigate(['/movies']);

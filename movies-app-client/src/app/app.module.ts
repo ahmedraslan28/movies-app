@@ -19,6 +19,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
@@ -54,6 +55,8 @@ import { MovieDetailsComponent } from './movies/movie-details/movie-details.comp
     MatSnackBarModule,
     MatCheckboxModule,
     MatPaginatorModule,
+    MatTabsModule,
+    MatTabsModule,
   ],
   providers: [
     {
