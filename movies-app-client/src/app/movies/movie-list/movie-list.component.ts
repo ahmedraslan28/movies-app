@@ -15,7 +15,7 @@ export class MovieListComponent implements OnInit {
   movies: Movie[] = [];
   loading = false;
   totalMovies = 0;
-  currentPage = 0;
+  currentPage = 1;
   pageSize = 9;
   isAdmin = false;
   selectedMovies = new Set<number>();
@@ -39,7 +39,7 @@ export class MovieListComponent implements OnInit {
     this.searchQuery = query;
     clearTimeout(this.searchTimeout);
     this.searchTimeout = setTimeout(() => {
-      this.currentPage = 0;
+      this.currentPage = 1;
       this.loadMovies();
     }, 300);
   }
@@ -48,7 +48,7 @@ export class MovieListComponent implements OnInit {
     this.loading = true;
     this.selectedMovies.clear(); // Clear selection when reloading movies
     this.moviesService
-      .getLibraryMovies(this.currentPage + 1, this.pageSize, this.searchQuery)
+      .getLibraryMovies(this.currentPage, this.pageSize, this.searchQuery)
       .subscribe({
         next: (response) => {
           this.movies = response.movies;
@@ -90,25 +90,32 @@ export class MovieListComponent implements OnInit {
   deleteSelectedMovies(): void {
     if (this.selectedMovies.size === 0) return;
 
-    const movieIds = Array.from(this.selectedMovies);
-    this.isDeleting = true;
-    
-    this.moviesService.deleteMovies(movieIds).subscribe({
-      next: () => {
-        this.isDeleting = false;
-        this.selectedMovies.clear();
-        this.loadMovies();
-        this.snackBar.open(`Successfully deleted ${movieIds.length} movies`, 'Close', {
-          duration: 3000,
-        });
-      },
-      error: () => {
-        this.isDeleting = false;
-        this.snackBar.open('Error deleting movies', 'Close', {
-          duration: 3000,
-        });
-      },
-    });
+    if (confirm('Are you sure you want to remove selected movies?')) {
+      const movieIds = Array.from(this.selectedMovies);
+      this.isDeleting = true;
+
+      this.moviesService.deleteMovies(movieIds).subscribe({
+        next: () => {
+          this.isDeleting = false;
+          this.selectedMovies.clear();
+          this.loadMovies();
+          this.snackBar.open(
+            `Successfully deleted ${movieIds.length} movies`,
+            'Close',
+            {
+              duration: 3000,
+            }
+          );
+        },
+        error: (error) => {
+          console.log(error);
+          this.isDeleting = false;
+          this.snackBar.open('Error deleting movies', 'Close', {
+            duration: 3000,
+          });
+        },
+      });
+    }
   }
 
   deleteMovie(movieId: number, event: Event): void {

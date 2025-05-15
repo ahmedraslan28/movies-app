@@ -66,7 +66,7 @@ public class MovieController {
     public ResponseEntity<Map<String, Object>> getAllMovies(@RequestParam(required = false) String title,
                                                             @RequestParam(defaultValue = "1") Integer page,
                                                             @RequestParam(defaultValue = "5") Integer size) {
-        return ResponseEntity.ok(movieService.getAllMovies(title, page - 1, size));
+        return ResponseEntity.ok(movieService.getAllMovies(title, page, size));
     }
 
 

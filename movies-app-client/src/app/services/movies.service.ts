@@ -29,12 +29,12 @@ export class MoviesService {
   }
 
   getLibraryMovies(
-    page: number = 1,
-    size: number = 10,
+    page: number,
+    size: number,
     title?: string
   ): Observable<{ movies: Movie[]; total: number }> {
     const params: { [key: string]: string } = {
-      page: page.toString(),
+      page: (page-1).toString(),
       size: size.toString(),
     };
 
