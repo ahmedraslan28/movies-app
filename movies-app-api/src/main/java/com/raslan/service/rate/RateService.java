@@ -6,5 +6,7 @@ import com.raslan.model.Rate;
 import java.util.Map;
 
 public interface RateService {
-    Map<String, Object> addRate(RateRequest rateRequest);
+    Map<String, Object> addRate(Integer userId, Integer movieId, Integer rateValue);
+
+    Map<String, Object> getRate(Integer userId, Integer movieId);
 }

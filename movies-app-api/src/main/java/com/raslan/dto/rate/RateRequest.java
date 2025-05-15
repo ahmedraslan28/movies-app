@@ -15,6 +15,4 @@ public class RateRequest {
     @Min(value = 1, message = "Rating must be at least 1")
     @Max(value = 5, message = "Rating must be no more than 5")
     private int rate;
-    private int userId;
-    private int movieId;
 }

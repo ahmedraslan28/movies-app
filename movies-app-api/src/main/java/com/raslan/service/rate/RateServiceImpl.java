@@ -3,6 +3,7 @@ package com.raslan.service.rate;
 import com.raslan.dto.rate.RateRequest;
 import com.raslan.exception.RequestValidationException;
 import com.raslan.exception.ResourceNotFoundException;
+import com.raslan.mapper.MovieMapper;
 import com.raslan.model.Movie;
 import com.raslan.model.Rate;
 import com.raslan.model.User;
@@ -14,7 +15,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,11 +30,11 @@ public class RateServiceImpl implements RateService {
 
     @Override
     @Transactional
-    public Map<String, Object> addRate(RateRequest rateRequest) {
-        Movie movie = movieRepository.findById(rateRequest.getMovieId())
+    public Map<String, Object> addRate(Integer userId, Integer movieId, Integer rateValue) {
+        Movie movie = movieRepository.findById(movieId)
                 .orElseThrow(() -> new ResourceNotFoundException("Movie not found"));
 
-        User user = userRepository.findById(rateRequest.getUserId())
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         if (rateRepository.existsByUserAndMovie(user, movie)) {
@@ -38,16 +42,34 @@ public class RateServiceImpl implements RateService {
         }
 
 
-        movieService.updateAverageRate(movie, rateRequest.getRate());
+        movieService.updateAverageRate(movie, rateValue);
 
-        Rate rate = Rate.builder().user(user).movie(movie).rateValue(rateRequest.getRate()).build();
+        Rate rate = Rate.builder().user(user).movie(movie).rateValue(rateValue).build();
 
         rateRepository.save(rate);
 
         return Map.of(
                 "message", "Rate added successfully",
-                "rateValue", movie.getAverageRating()
+                "updatedMovie", MovieMapper.toMovieResponse(movie)
         );
 
+    }
+
+    @Override
+    public Map<String, Object> getRate(Integer userId, Integer movieId) {
+        Movie movie = movieRepository.findById(movieId)
+                .orElseThrow(() -> new ResourceNotFoundException("Movie not found"));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        Optional<Rate> rate = rateRepository.findByUserAndMovie(user,movie) ;
+        return rate.<Map<String, Object>>map(value -> Map.of(
+                "message", "Rate retrieved successfully",
+                "value", value.getRateValue()
+        )).orElseGet(() -> Map.of(
+                "message", "User has not rated this movie",
+                "value", 0
+        ));
     }
 }
