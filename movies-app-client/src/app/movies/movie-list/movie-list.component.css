@@ -110,8 +110,14 @@
 
 .year,
 .type {
-  color: #666;
+  color: rgba(0, 0, 0, 0.7);
   margin: 4px 0;
+  display: inline-block;
+  padding: 4px 8px;
+  background-color: #f5f5f5;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .rating {
@@ -255,4 +261,12 @@ mat-paginator {
 .actions-toolbar .toolbar-right {
   display: flex;
   align-items: center;
+}
+
+.movie-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
 }

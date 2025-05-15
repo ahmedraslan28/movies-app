@@ -74,10 +74,11 @@
               <mat-icon>movie</mat-icon>
             </div>
 
-            <mat-card-content>
-              <h3>{{ movie.title }}</h3>
-              <p class="year">{{ movie.year }}</p>
-              <p class="type">{{ movie.type }}</p>
+            <mat-card-content>              <h3>{{ movie.title }}</h3>
+              <div class="movie-meta">
+                <span class="year">{{ movie.year }}</span>
+                <span class="type">{{ movie.type | titlecase }}</span>
+              </div>
               <button
                 mat-stroked-button
                 color="warn"
