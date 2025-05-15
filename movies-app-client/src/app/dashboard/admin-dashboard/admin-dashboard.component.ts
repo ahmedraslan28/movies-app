@@ -109,6 +109,20 @@ export class AdminDashboardComponent implements OnInit {
     });
   }
 
+  addSingleMovie(imdbID: string): void {
+    this.isAddingMovies = true;
+    this.moviesService.addSingleMovie(imdbID).subscribe({
+      next: () => {
+        this.isAddingMovies = false;
+        this.snackBar.open('Movie added successfully', 'Close', { duration: 3000 });
+      },
+      error: (error) => {
+        this.isAddingMovies = false;
+        this.snackBar.open(error.error.message, 'Close', { duration: 3000 });
+      }
+    });
+  }
+
   private showResultMessage(addedCount: number, errorCount: number): void {
     const message =
       errorCount === 0

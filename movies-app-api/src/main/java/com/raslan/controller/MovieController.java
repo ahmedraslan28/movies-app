@@ -36,8 +36,8 @@ public class MovieController {
 
     @PostMapping("/addMovie")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<MovieResponse> addMovie(@RequestBody String imdbid) {
-        return ResponseEntity.ok(movieService.addMovie(imdbid));
+    public ResponseEntity<MovieResponse> addMovie(@RequestBody String imdbID) {
+        return ResponseEntity.ok(movieService.addMovie(imdbID));
     }
 
 

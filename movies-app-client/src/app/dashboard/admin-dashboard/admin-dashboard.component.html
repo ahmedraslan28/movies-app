@@ -121,7 +121,7 @@
                 <h3>{{ movie.Title }}</h3>
                 <p class="year">{{ movie.Year }}</p>
                 <p class="type">{{ movie.Type | titlecase }}</p>
-                <button mat-raised-button color="primary" class="add-button">
+                <button mat-raised-button color="primary" class="add-button" (click)="addSingleMovie(movie.imdbID)">
                   <mat-icon>add_circle</mat-icon>
                   Add to Library
                 </button>

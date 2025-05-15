@@ -27,6 +27,9 @@ export class MoviesService {
   addMoviesToLibrary(imdbIds: string[]): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/movies`, imdbIds);
   }
+  addSingleMovie(imdbID : string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/movies/addMovie`, imdbID);
+  }
 
   getLibraryMovies(
     page: number,
@@ -34,7 +37,7 @@ export class MoviesService {
     title?: string
   ): Observable<{ movies: Movie[]; total: number }> {
     const params: { [key: string]: string } = {
-      page: (page-1).toString(),
+      page: (page).toString(),
       size: size.toString(),
     };
 

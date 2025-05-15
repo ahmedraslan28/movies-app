@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PageEvent } from '@angular/material/paginator';
 import { MoviesService } from '../../services/movies.service';
@@ -15,7 +15,7 @@ export class MovieListComponent implements OnInit {
   movies: Movie[] = [];
   loading = false;
   totalMovies = 0;
-  currentPage = 1;
+  currentPage = 0;
   pageSize = 9;
   isAdmin = false;
   selectedMovies = new Set<number>();
@@ -27,19 +27,29 @@ export class MovieListComponent implements OnInit {
     private moviesService: MoviesService,
     private authService: AuthService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private route: ActivatedRoute
   ) {
     this.isAdmin = this.authService.isAdmin();
   }
 
   ngOnInit(): void {
+    const params = this.route.snapshot.queryParamMap;
+
+    const page = parseInt(params.get('page') || '0', 10);
+    const size = parseInt(params.get('size') || '9', 10);
+
+    this.currentPage = page >= 0 ? page : 0;
+    this.pageSize = size > 0 ? size : 9;
+
     this.loadMovies();
   }
   onSearch(query: string): void {
     this.searchQuery = query;
     clearTimeout(this.searchTimeout);
     this.searchTimeout = setTimeout(() => {
-      this.currentPage = 1;
+      this.currentPage = 0;
+      this.addParamsToUrl();
       this.loadMovies();
     }, 300);
   }
@@ -67,6 +77,7 @@ export class MovieListComponent implements OnInit {
   onPageChange(event: PageEvent): void {
     this.currentPage = event.pageIndex;
     this.pageSize = event.pageSize;
+    this.addParamsToUrl();
     this.loadMovies();
   }
 
@@ -145,5 +156,12 @@ export class MovieListComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
+  }
+
+  addParamsToUrl(): void {
+    this.router.navigate([], {
+      queryParams: { page: this.currentPage },
+      queryParamsHandling: 'merge',
+    });
   }
 }

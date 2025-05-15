@@ -4,6 +4,7 @@ import com.raslan.dto.movie.MovieRequest;
 import com.raslan.dto.movie.MovieResponse;
 import com.raslan.dto.movie.OmdbMovieResponse;
 import com.raslan.dto.movie.OmdbSearchResponse;
+import com.raslan.exception.DuplicatedRowException;
 import com.raslan.exception.RequestValidationException;
 import com.raslan.exception.ResourceNotFoundException;
 import com.raslan.mapper.MovieMapper;
@@ -132,7 +133,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public MovieResponse addMovie(String imdbId) {
         if (movieRepository.existsByImdbId(imdbId)) {
-            return null;
+            throw new DuplicatedRowException("movie already exists in your library");
         }
 
         MovieResponse movie = getOmdbMovie(imdbId);
