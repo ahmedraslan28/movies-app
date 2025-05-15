@@ -26,13 +26,7 @@ export class UserDashboardComponent implements OnInit {
     private authService: AuthService,
     private snackBar: MatSnackBar,
     private router: Router
-  ) {
-    this.authService.currentUser$.subscribe((user) => {
-      if (user) {
-        this.userName = user.email;
-      }
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
     this.loadMovies();
@@ -63,24 +57,24 @@ export class UserDashboardComponent implements OnInit {
     this.loadMovies();
   }
 
-  onRateMovie(movie: Movie, rating: number): void {
-    this.moviesService.rateMovie(movie.id, rating).subscribe({
-      next: (updatedMovie) => {
-        const index = this.movies.findIndex((m) => m.id === updatedMovie.id);
-        if (index !== -1) {
-          this.movies[index] = updatedMovie;
-        }
-        this.snackBar.open('Rating updated successfully', 'Close', {
-          duration: 2000,
-        });
-      },
-      error: (error) => {
-        this.snackBar.open('Error updating rating', 'Close', {
-          duration: 3000,
-        });
-      },
-    });
-  }
+  // onRateMovie(movie: Movie, rating: number): void {
+  //   this.moviesService.rateMovie(movie.id, rating).subscribe({
+  //     next: (updatedMovie) => {
+  //       const index = this.movies.findIndex((m) => m.id === updatedMovie.id);
+  //       if (index !== -1) {
+  //         this.movies[index] = updatedMovie;
+  //       }
+  //       this.snackBar.open('Rating updated successfully', 'Close', {
+  //         duration: 2000,
+  //       });
+  //     },
+  //     error: (error) => {
+  //       this.snackBar.open('Error updating rating', 'Close', {
+  //         duration: 3000,
+  //       });
+  //     },
+  //   });
+  // }
 
   viewDetails(movieId: number): void {
     this.router.navigate(['/movies', movieId]);

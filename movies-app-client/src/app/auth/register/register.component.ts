@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
+import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-register',
@@ -60,8 +61,15 @@ export class RegisterComponent implements OnInit {
     const { email, password, confirmPassword } = this.registerForm.value;
 
     this.authService.register(email, password, confirmPassword).subscribe({
-      next: () => {
+      next: (response) => {
         this.loading = false;
+        const user: User = {
+          id: response.userId,
+          email: response.email,
+          role: response.role,
+        };
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        localStorage.setItem('token', response.token);
         this.snackBar.open(
           'Registration successful! Redirecting to dashboard...',
           'Close',
