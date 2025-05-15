@@ -22,7 +22,6 @@ export class MovieListComponent implements OnInit {
   isAdmin = false;
   selectedMovies = new Set<number>();
   searchQuery = '';
-  private searchSubject = new Subject<string>();
   private searchTimeout: any;
 
   constructor(
@@ -32,14 +31,6 @@ export class MovieListComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.isAdmin = this.authService.isAdmin();
-
-    // Setup search with debounce
-    this.searchSubject
-      .pipe(debounceTime(300), distinctUntilChanged())
-      .subscribe(() => {
-        this.currentPage = 0; // Reset to first page when searching
-        this.loadMovies();
-      });
   }
 
   ngOnInit(): void {
