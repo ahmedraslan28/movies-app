@@ -20,6 +20,7 @@ export class MovieListComponent implements OnInit {
   isAdmin = false;
   selectedMovies = new Set<number>();
   searchQuery = '';
+  isDeleting = false;
   private searchTimeout: any;
 
   constructor(
@@ -89,25 +90,25 @@ export class MovieListComponent implements OnInit {
   deleteSelectedMovies(): void {
     if (this.selectedMovies.size === 0) return;
 
-    if (
-      confirm(
-        `Are you sure you want to delete ${this.selectedMovies.size} selected movies?`
-      )
-    ) {
-      this.moviesService.deleteMovies([...this.selectedMovies]).subscribe({
-        next: (response) => {
-          this.snackBar.open(response.message, 'Close', {
-            duration: 2000,
-          });
-          this.loadMovies();
-        },
-        error: (error: any) => {
-          this.snackBar.open('Error in removing selected movies', 'Close', {
-            duration: 3000,
-          });
-        },
-      });
-    }
+    const movieIds = Array.from(this.selectedMovies);
+    this.isDeleting = true;
+    
+    this.moviesService.deleteMovies(movieIds).subscribe({
+      next: () => {
+        this.isDeleting = false;
+        this.selectedMovies.clear();
+        this.loadMovies();
+        this.snackBar.open(`Successfully deleted ${movieIds.length} movies`, 'Close', {
+          duration: 3000,
+        });
+      },
+      error: () => {
+        this.isDeleting = false;
+        this.snackBar.open('Error deleting movies', 'Close', {
+          duration: 3000,
+        });
+      },
+    });
   }
 
   deleteMovie(movieId: number, event: Event): void {

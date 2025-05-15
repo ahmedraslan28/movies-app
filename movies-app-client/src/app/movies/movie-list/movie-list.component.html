@@ -6,17 +6,7 @@
         Logout
       </button>
     </div>
-    <span class="toolbar-title">Movie Library</span>
-    <div class="toolbar-right">
-      <button
-        mat-button
-        color="warn"
-        *ngIf="isAdmin && selectedMovies.size > 0"
-        (click)="deleteSelectedMovies()"
-      >
-        <mat-icon>delete</mat-icon>
-        Delete Selected ({{ selectedMovies.size }})
-      </button>
+    <span class="toolbar-title">Movie Library</span>    <div class="toolbar-right">
       <button mat-button *ngIf="isAdmin" (click)="goToAdminDashboard()">
         <mat-icon>add</mat-icon>
         Add Movies
@@ -33,8 +23,7 @@
         </mat-card-subtitle>
       </mat-card-header>
 
-      <mat-card-content>
-        <!-- Search Box -->
+      <mat-card-content>        <!-- Search Box -->
         <div class="search-container">
           <mat-form-field class="search-field">
             <mat-label>Search movies</mat-label>
@@ -46,6 +35,27 @@
             />
             <mat-icon matPrefix>search</mat-icon>
           </mat-form-field>
+        </div>        <!-- Actions Toolbar -->
+        <div class="actions-toolbar" *ngIf="isAdmin">
+          <div class="toolbar-right">
+            <button
+              mat-raised-button
+              color="warn"
+              class="delete-selected-btn"
+              [disabled]="selectedMovies.size === 0 || isDeleting"
+              (click)="deleteSelectedMovies()"
+            >
+              <mat-spinner
+                *ngIf="isDeleting"
+                diameter="20"
+                class="button-spinner"
+              ></mat-spinner>
+              <span *ngIf="!isDeleting">
+                <mat-icon>delete</mat-icon>
+                Delete Selected ({{ selectedMovies.size }})
+              </span>
+            </button>
+          </div>
         </div>
 
         <div class="movies-grid" *ngIf="movies.length > 0">

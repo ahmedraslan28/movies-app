@@ -215,3 +215,44 @@ mat-paginator {
   width: 100%;
   max-width: 500px;
 }
+
+.delete-selected-btn {
+  position: relative;
+  min-width: 200px;
+  height: 36px;
+  padding: 0 16px;
+}
+
+.delete-selected-btn span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.delete-selected-btn mat-icon {
+  margin: 0;
+}
+
+.button-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.actions-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  padding-left: 25px;
+  padding-right: 25px;
+  margin: 0;
+}
+
+.actions-toolbar .toolbar-left,
+.actions-toolbar .toolbar-right {
+  display: flex;
+  align-items: center;
+}
