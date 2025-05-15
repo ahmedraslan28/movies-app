@@ -28,7 +28,7 @@
           </div>
 
           <div class="rating-section">
-            <h3>{{ userRating ? 'Your Rating' : 'Rate this movie' }}</h3>
+            <h3>{{ userRating ? "Your Rating" : "Rate this movie" }}</h3>
             <div class="stars">
               <button
                 mat-icon-button
@@ -36,22 +36,36 @@
                 [color]="userRating >= star ? 'accent' : ''"
                 (click)="onRateMovie(star)"
                 [disabled]="userRating > 0"
-                [matTooltip]="userRating ? 'You have already rated this movie' : ''"
+                [matTooltip]="
+                  userRating ? 'You have already rated this movie' : ''
+                "
               >
-                <mat-icon>{{ userRating >= star ? 'star' : 'star_border' }}</mat-icon>
+                <mat-icon>{{
+                  userRating >= star ? "star" : "star_border"
+                }}</mat-icon>
               </button>
             </div>
             <div class="rating-stats">
               <ng-container *ngIf="userRating > 0">
                 <p class="user-rating">Your rating: {{ userRating }} / 5</p>
               </ng-container>
-              <p class="current-rating" *ngIf="movie.averageRating || movie.ratingCount">
-                Average Rating: {{ movie.averageRating ? movie.averageRating.toFixed(1) : '0' }} / 5
+              <p
+                class="current-rating"
+                *ngIf="movie.averageRating || movie.ratingCount"
+              >
+                Average Rating:
+                {{
+                  movie.averageRating ? movie.averageRating.toFixed(1) : "0"
+                }}
+                / 5
                 <span class="rating-count" *ngIf="movie.ratingCount">
-                  ({{ movie.ratingCount }} {{ movie.ratingCount === 1 ? 'rating' : 'ratings' }})
+                  ({{ movie.ratingCount }}
+                  {{ movie.ratingCount === 1 ? "rating" : "ratings" }})
                 </span>
               </p>
-              <p class="no-ratings" *ngIf="!movie.ratingCount">No ratings yet</p>
+              <p class="no-ratings" *ngIf="!movie.ratingCount">
+                No ratings yet
+              </p>
             </div>
           </div>
         </div>
@@ -95,11 +109,13 @@
                 </div>
               </div>
             </mat-tab>
-
             <mat-tab label="Ratings">
               <div class="tab-content">
                 <div class="plain-info">
-                  <p>
+                  <p *ngIf="userRating" class="user-rating-details">
+                    <strong>Your Rating:</strong> {{ userRating }}/5
+                  </p>
+                  <p class="average-rating-details">
                     <strong>Average Rating:</strong>
                     {{
                       movie.averageRating
