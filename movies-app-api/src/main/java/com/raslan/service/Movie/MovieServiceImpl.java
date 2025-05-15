@@ -12,6 +12,7 @@ import com.raslan.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -91,18 +92,22 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public Map<String, Object> getAllMovies(String title, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
-        List<MovieResponse> moviesResponse;
+        Page<Movie> moviesPage;
+
         if (title == null || title.isBlank()) {
-            moviesResponse = movieRepository.findAll(pageable).stream()
-                    .map(MovieMapper::toMovieResponse)
-                    .toList();
+            moviesPage = movieRepository.findAll(pageable);
         } else {
-            moviesResponse = movieRepository.findByTitleContainingIgnoreCase(title, pageable)
-                    .stream()
-                    .map(MovieMapper::toMovieResponse)
-                    .toList();
+            moviesPage = movieRepository.findByTitleContainingIgnoreCase(title, pageable);
         }
-        return Map.of("movies", moviesResponse, "total", movieRepository.count());
+
+        List<MovieResponse> moviesResponse = moviesPage.stream()
+                .map(MovieMapper::toMovieResponse)
+                .toList();
+
+        return Map.of(
+                "movies", moviesResponse,
+                "total", moviesPage.getTotalElements()  // <-- total matching movies
+        );
     }
 
     @Override
