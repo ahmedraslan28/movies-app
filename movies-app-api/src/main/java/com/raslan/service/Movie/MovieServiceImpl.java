@@ -106,7 +106,7 @@ public class MovieServiceImpl implements MovieService {
 
         return Map.of(
                 "movies", moviesResponse,
-                "total", moviesPage.getTotalElements()  // <-- total matching movies
+                "total", moviesPage.getTotalElements()
         );
     }
 
