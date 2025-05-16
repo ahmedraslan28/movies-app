@@ -88,13 +88,10 @@ export class MovieListComponent implements OnInit {
   viewDetails(movieId: number): void {
     this.router.navigate(['/movies', movieId]);
   }
-
-  toggleMovieSelection(movieId: number, event: Event): void {
-    if (this.selectedMovies.has(movieId)) {
-      this.selectedMovies.delete(movieId);
-    } else {
-      this.selectedMovies.add(movieId);
-    }
+  toggleMovieSelection(movieId: number, event: { checked: boolean }): void {
+    event.checked
+      ? this.selectedMovies.add(movieId)
+      : this.selectedMovies.delete(movieId);
   }
 
   isMovieSelected(movieId: number): boolean {

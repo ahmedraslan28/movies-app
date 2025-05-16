@@ -24,7 +24,7 @@ export class AuthService {
     password: string,
     password2: string
   ): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${AUTH_URL}register`, {
+    return this.http.post<AuthResponse>(`${AUTH_URL}/register`, {
       email,
       password,
       password2,

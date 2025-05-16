@@ -77,7 +77,7 @@ export class RegisterComponent implements OnInit {
             duration: 3000,
           }
         );
-        this.router.navigate(['/user/dashboard']);
+        this.router.navigate(['movies']);
       },
       error: (error) => {
         this.loading = false;
