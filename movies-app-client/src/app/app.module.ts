@@ -23,12 +23,11 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
 
-import { LoginComponent } from './auth/login/login.component';
-import { RegisterComponent } from './auth/register/register.component';
-import { AdminDashboardComponent } from './dashboard/admin-dashboard/admin-dashboard.component';
-import { UserDashboardComponent } from './dashboard/user-dashboard/user-dashboard.component';
-import { MovieListComponent } from './movies/movie-list/movie-list.component';
-import { MovieDetailsComponent } from './movies/movie-details/movie-details.component';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
+import { MovieListComponent } from './components/movie-list/movie-list.component';
+import { MovieDetailsComponent } from './components/movie-details/movie-details.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +35,6 @@ import { MovieDetailsComponent } from './movies/movie-details/movie-details.comp
     LoginComponent,
     RegisterComponent,
     AdminDashboardComponent,
-    UserDashboardComponent,
     MovieListComponent,
     MovieDetailsComponent,
   ],
