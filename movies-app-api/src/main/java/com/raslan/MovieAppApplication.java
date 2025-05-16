@@ -20,14 +20,21 @@ public class MovieAppApplication {
 	public CommandLineRunner addDefaultUser(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		return args -> {
 			if (!userRepository.existsByEmail("admin@fawry.com")) {
-				User user = User.builder()
+				User admin = User.builder()
 						.email("admin@fawry.com")
 						.password(passwordEncoder.encode("fawry"))
 						.role(Role.ADMIN)
 						.build();
 
+				User user = User.builder()
+						.email("user@fawry.com")
+						.password(passwordEncoder.encode("fawry"))
+						.role(Role.ADMIN)
+						.build();
+
 				userRepository.save(user);
-				System.out.println("Default admin user created.");
+				userRepository.save(admin);
+				System.out.println("Default users created.");
 			}
 		};
 	}
