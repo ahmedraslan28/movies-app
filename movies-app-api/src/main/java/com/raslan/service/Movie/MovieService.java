@@ -15,8 +15,6 @@ public interface MovieService {
 
     public MovieResponse getOmdbMovie(String id);
 
-    List<MovieResponse> moviesPatchAdd(List<MovieRequest> movies);
-
     Map<String, Object> getAllMovies(String title, Integer page, Integer size);
 
     MovieResponse getMovie(Integer id);

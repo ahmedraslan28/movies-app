@@ -71,19 +71,6 @@ public class MovieServiceImpl implements MovieService {
                 .build();
     }
 
-
-    @Override
-    @Transactional
-    public List<MovieResponse> moviesPatchAdd(List<MovieRequest> moviesRequest) {
-        if (moviesRequest == null || moviesRequest.isEmpty()) {
-            throw new RequestValidationException("Can't add Empty list of movies");
-        }
-        List<Movie> movies = moviesRequest.stream().map(MovieMapper::toMovie).toList();
-        movies = movieRepository.saveAll(movies);
-        return movies.stream().map(MovieMapper::toMovieResponse).toList();
-    }
-
-
     @Override
     public MovieResponse getMovie(Integer id) {
         Movie movie = movieRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Movie not found"));
