@@ -20,7 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MovieController {
     private final MovieService movieService;
-    private final RateService rateService ;
+    private final RateService rateService;
 
     @GetMapping("/omdb")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -43,9 +43,6 @@ public class MovieController {
         return ResponseEntity.ok(movieService.addMovie(imdbID));
     }
 
-
-
-
     @PostMapping("/deletePatch")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Map<String, String>> deleteMovies(@RequestBody List<Integer> moviesIds) {
@@ -61,13 +58,13 @@ public class MovieController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> getMovie(@PathVariable Integer id,@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Map<String, Object>> getMovie(@PathVariable Integer id, @AuthenticationPrincipal UserDetails userDetails) {
         User LoggedInUser = (User) userDetails;
         Integer rate = (Integer) rateService.getRate(LoggedInUser.getId(), id).get("value");
         return ResponseEntity.ok(
                 Map.of(
-                        "movie" ,movieService.getMovie(id),
-                        "userRate" ,rate
+                        "movie", movieService.getMovie(id),
+                        "userRate", rate
                 )
         );
     }
