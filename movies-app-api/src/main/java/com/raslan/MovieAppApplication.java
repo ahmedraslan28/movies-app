@@ -29,7 +29,7 @@ public class MovieAppApplication {
 				User user = User.builder()
 						.email("user@fawry.com")
 						.password(passwordEncoder.encode("fawry"))
-						.role(Role.ADMIN)
+						.role(Role.USER)
 						.build();
 
 				userRepository.save(user);
