@@ -2,21 +2,20 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Movie } from '../models/movie.model';
-import { OmdbMovie, OmdbSearchResponse } from '../models/omdb.model';
+import { OmdbSearchResponse } from '../models/omdb.model';
+import { MOVIES_URL } from '../constants';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MoviesService {
-  private baseUrl = 'http://localhost:8080/api';
-
   constructor(private http: HttpClient) {}
 
   searchMovies(
     title: string,
     page: number = 1
   ): Observable<OmdbSearchResponse> {
-    return this.http.get<OmdbSearchResponse>(`${this.baseUrl}/movies/omdb`, {
+    return this.http.get<OmdbSearchResponse>(`${MOVIES_URL}/omdb`, {
       params: {
         searchParam: title,
         page: page.toString(),
@@ -25,10 +24,10 @@ export class MoviesService {
   }
 
   addMoviesToLibrary(imdbIds: string[]): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/movies`, imdbIds);
+    return this.http.post<any>(MOVIES_URL, imdbIds);
   }
   addSingleMovie(imdbID : string): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/movies/addMovie`, imdbID);
+    return this.http.post<any>(`${MOVIES_URL}/addMovie`, imdbID);
   }
 
   getLibraryMovies(
@@ -46,7 +45,7 @@ export class MoviesService {
     }
 
     return this.http.get<{ movies: Movie[]; total: number }>(
-      `${this.baseUrl}/movies`,
+      MOVIES_URL,
       {
         params,
       }
@@ -54,19 +53,19 @@ export class MoviesService {
   }
   deleteMovies(movieIds: number[]): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(
-      `${this.baseUrl}/movies/deletePatch`,
+      `${MOVIES_URL}/deletePatch`,
       movieIds
     );
   }
 
   deleteMovie(movieId: number): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(
-      `${this.baseUrl}/movies/${movieId}`,
+      `${MOVIES_URL}/${movieId}`,
       {}
     );
   }
 
   getMovieDetails(movieId: number): Observable<Movie> {
-    return this.http.get<Movie>(`${this.baseUrl}/movies/${movieId}`);
+    return this.http.get<Movie>(`${MOVIES_URL}/${movieId}`);
   }
 }

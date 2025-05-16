@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
         if (response.role === UserRole.ADMIN) {
           this.router.navigate(['/admin/dashboard']);
         } else {
-          this.router.navigate(['/user/dashboard']);
+          this.router.navigate(['movies']);
         }
       },
       error: (error) => {

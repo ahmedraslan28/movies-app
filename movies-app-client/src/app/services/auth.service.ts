@@ -4,17 +4,16 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { User } from '../models/user.model';
 import { AuthResponse } from '../models/auth-response.model';
+import { AUTH_URL } from '../constants';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080';
-
   constructor(private http: HttpClient, private router: Router) {}
 
   login(email: string, password: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, {
+    return this.http.post<AuthResponse>(`${AUTH_URL}/login`, {
       email,
       password,
     });
@@ -25,7 +24,7 @@ export class AuthService {
     password: string,
     password2: string
   ): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, {
+    return this.http.post<AuthResponse>(`${AUTH_URL}register`, {
       email,
       password,
       password2,

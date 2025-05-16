@@ -19,11 +19,6 @@ const routes: Routes = [
     data: { role: 'admin' },
   },
   {
-    path: 'user/dashboard',
-    component: UserDashboardComponent,
-    canActivate: [AuthGuard],
-  },
-  {
     path: 'movies',
     component: MovieListComponent,
     canActivate: [AuthGuard],

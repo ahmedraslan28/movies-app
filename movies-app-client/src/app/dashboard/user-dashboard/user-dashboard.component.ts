@@ -57,7 +57,6 @@ export class UserDashboardComponent implements OnInit {
     this.loadMovies();
   }
 
-
   viewDetails(movieId: number): void {
     this.router.navigate(['/movies', movieId]);
   }
