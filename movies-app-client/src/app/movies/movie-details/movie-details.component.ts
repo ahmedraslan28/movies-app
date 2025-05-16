@@ -5,7 +5,7 @@ import { MoviesService } from '../../services/movies.service';
 import { RateService } from '../../services/rate.service';
 import { Movie } from '../../models/movie.model';
 import { AuthService } from '../../services/auth.service';
-import { finalize } from 'rxjs/operators';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-movie-details',
@@ -25,28 +25,32 @@ export class MovieDetailsComponent implements OnInit {
     private moviesService: MoviesService,
     private rateService: RateService,
     private authService: AuthService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private location: Location
   ) {
     this.isAdmin = this.authService.isAdmin();
   }
 
   ngOnInit(): void {
-    const id = +this.route.snapshot.params['id']; // get param and convert to number
+    const id = +this.route.snapshot.params['id'];
     if (id) {
       this.loadMovie(id);
     } else {
-      this.router.navigate(['/movies']); // fallback if id is invalid
+      this.router.navigate(['/movies']);
     }
   }
 
   loadMovie(id: number): void {
     this.loading = true;
     this.moviesService.getMovieDetails(id).subscribe({
-      next: (movie) => {
-        this.movie = movie;
-        this.loadUserRating(id);
+      next: (response) => {
+        this.movie = response.movie;
+        this.userRating = response.userRate;
+        this.loading = false;
       },
       error: (error) => {
+        this.userRating = 0;
+        this.loading = false;
         this.snackBar.open(error.message || 'Failed to load movie', 'Close', {
           duration: 3000,
         });
@@ -56,36 +60,20 @@ export class MovieDetailsComponent implements OnInit {
     });
   }
 
-  loadUserRating(movieId: number): void {
-    this.rateService.getUserRating(movieId).subscribe({
-      next: (response) => {
-        this.userRating = response.value;
-        this.loading = false;
-      },
-      error: () => {
-        this.userRating = 0;
-        this.loading = false;
-      },
-    });
-  }
-
   onRateMovie(rating: number): void {
     if (!this.movie || this.ratingInProgress) return;
-
-    const previousRating = this.userRating;
-    this.userRating = rating;
     this.ratingInProgress = true;
-
     this.rateService.addRate(this.movie.id, rating).subscribe({
       next: (response) => {
-        this.ratingInProgress = false; // manually unset loading here
+        this.ratingInProgress = false;
+        this.userRating = rating;
         this.movie = response.updatedMovie;
         this.snackBar.open(response.message, 'Close', { duration: 2000 });
       },
       error: (error) => {
-        this.ratingInProgress = false; // manually unset loading here as well
-        this.userRating = previousRating;
-        this.snackBar.open(error.message || 'Rating failed', 'Close', {
+        console.log(error)
+        this.ratingInProgress = false;
+        this.snackBar.open(error.error.message || 'Rating failed', 'Close', {
           duration: 3000,
         });
       },
@@ -93,6 +81,6 @@ export class MovieDetailsComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/movies']);
+    this.location.back();
   }
 }

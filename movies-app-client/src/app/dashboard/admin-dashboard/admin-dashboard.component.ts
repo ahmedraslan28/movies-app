@@ -26,7 +26,6 @@ export class AdminDashboardComponent implements OnInit {
   constructor(
     private moviesService: MoviesService,
     private authService: AuthService,
-    private router: Router,
     private snackBar: MatSnackBar
   ) {}
 
@@ -49,7 +48,10 @@ export class AdminDashboardComponent implements OnInit {
           this.resetSearch('No movies found');
         }
       },
-      error: () => this.resetSearch('Error from OMDb server. Try again.'),
+      error: (error) =>
+        this.resetSearch(
+          error.error.message || 'Error from OMDb server. Try again.'
+        ),
     });
   }
 
@@ -69,8 +71,7 @@ export class AdminDashboardComponent implements OnInit {
 
   // ========== Movie Selection ==========
   toggleSelection(movie: OmdbMovie, checked?: boolean): void {
-    const isSelected =
-      checked !== undefined ? checked : !this.isSelected(movie);
+    const isSelected = !this.isSelected(movie);
 
     isSelected
       ? this.selectedMovies.add(movie.imdbID)
@@ -105,7 +106,7 @@ export class AdminDashboardComponent implements OnInit {
       error: () => {
         this.isAddingMovies = false;
         this.showResultMessage(0, movieIds.length);
-      }
+      },
     });
   }
 
@@ -114,12 +115,14 @@ export class AdminDashboardComponent implements OnInit {
     this.moviesService.addSingleMovie(imdbID).subscribe({
       next: () => {
         this.isAddingMovies = false;
-        this.snackBar.open('Movie added successfully', 'Close', { duration: 3000 });
+        this.snackBar.open('Movie added successfully', 'Close', {
+          duration: 3000,
+        });
       },
       error: (error) => {
         this.isAddingMovies = false;
         this.snackBar.open(error.error.message, 'Close', { duration: 3000 });
-      }
+      },
     });
   }
 

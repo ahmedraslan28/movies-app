@@ -67,9 +67,13 @@ export class MovieListComponent implements OnInit {
         },
         error: (error) => {
           this.loading = false;
-          this.snackBar.open('Error loading movies', 'Close', {
-            duration: 3000,
-          });
+          this.snackBar.open(
+            error.error.message || 'Error loading movies',
+            'Close',
+            {
+              duration: 3000,
+            }
+          );
         },
       });
   }
@@ -86,7 +90,6 @@ export class MovieListComponent implements OnInit {
   }
 
   toggleMovieSelection(movieId: number, event: Event): void {
-    event.stopPropagation();
     if (this.selectedMovies.has(movieId)) {
       this.selectedMovies.delete(movieId);
     } else {

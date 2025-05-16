@@ -1,6 +1,5 @@
 package com.raslan.service.rate;
 
-import com.raslan.dto.rate.RateRequest;
 import com.raslan.exception.RequestValidationException;
 import com.raslan.exception.ResourceNotFoundException;
 import com.raslan.mapper.MovieMapper;
@@ -15,8 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -40,7 +37,6 @@ public class RateServiceImpl implements RateService {
         if (rateRepository.existsByUserAndMovie(user, movie)) {
             throw new RequestValidationException("User has already rated this movie");
         }
-
 
         movieService.updateAverageRate(movie, rateValue);
 

@@ -65,7 +65,7 @@ export class MoviesService {
     );
   }
 
-  getMovieDetails(movieId: number): Observable<Movie> {
-    return this.http.get<Movie>(`${MOVIES_URL}/${movieId}`);
+  getMovieDetails(movieId: number): Observable<{ movie: Movie, userRate: number }> {
+    return this.http.get<{ movie: Movie, userRate: number }>(`${MOVIES_URL}/${movieId}`);
   }
 }

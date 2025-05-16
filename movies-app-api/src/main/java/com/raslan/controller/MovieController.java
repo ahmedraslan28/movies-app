@@ -1,15 +1,17 @@
 package com.raslan.controller;
 
-import com.raslan.dto.movie.MovieRequest;
 import com.raslan.dto.movie.MovieResponse;
 import com.raslan.dto.movie.OmdbSearchResponse;
+import com.raslan.model.User;
 import com.raslan.service.Movie.MovieService;
+import com.raslan.service.rate.RateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MovieController {
     private final MovieService movieService;
+    private final RateService rateService ;
 
     @GetMapping("/omdb")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -58,8 +61,15 @@ public class MovieController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MovieResponse> getMovie(@PathVariable Integer id) {
-        return ResponseEntity.ok(movieService.getMovie(id));
+    public ResponseEntity<Map<String, Object>> getMovie(@PathVariable Integer id,@AuthenticationPrincipal UserDetails userDetails) {
+        User LoggedInUser = (User) userDetails;
+        Integer rate = (Integer) rateService.getRate(LoggedInUser.getId(), id).get("value");
+        return ResponseEntity.ok(
+                Map.of(
+                        "movie" ,movieService.getMovie(id),
+                        "userRate" ,rate
+                )
+        );
     }
 
     @GetMapping("")
