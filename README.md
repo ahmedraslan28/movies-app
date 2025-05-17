@@ -104,7 +104,7 @@
    ```sh
    cd movies-app-api
    mvn clean package 
-   docker-compose --build -d 
+   docker-compose up --build -d 
    ```
 4. access the app
   * app will be on: http://localhost:4201
