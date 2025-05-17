@@ -91,3 +91,23 @@
   * admin account {email: admin@fawry.com, password: fawry}
   * user account  {email: user@fawry.com, password: fawry}
 
+
+### Running Using Docker
+1. Docker should be installed on your machine:
+   
+2. Clone the repository:
+   ```sh
+   git clone https://github.com/ahmedraslan28/movies-app.git
+   cd movies-app
+   ```
+3. Run commands:
+   ```sh
+   cd movies-app-api
+   mvn clean package 
+   docker-compose --build -d 
+   ```
+4. access the app
+  * app will be on: http://localhost:4201
+  * admin account {email: admin@fawry.com, password: fawry}
+  * user account  {email: user@fawry.com, password: fawry}
+

@@ -1,0 +1,54 @@
+services:
+  dp:
+    image: mysql:latest
+    container_name: mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: fawry
+      MYSQL_USER: fawry
+      MYSQL_PASSWORD: fawry
+      MYSQL_DATABASE: movieApp
+    restart: unless-stopped
+    volumes:
+      - dp:/var/lib/mysql
+    networks:
+      - app_network
+  
+  api:
+    container_name: movies-api
+    
+    build: 
+      context: ./movies-app-api
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://dp:3306/movieApp
+      SPRING_DATASOURCE_USERNAME: fawry
+      SPRING_DATASOURCE_PASSWORD: fawry
+
+    ports:
+      - "8080:8080"
+
+    depends_on:
+      - dp
+
+    networks:
+      - app_network
+
+    restart: unless-stopped
+  
+  client:
+    container_name: movies-client
+    build:
+      context: ./movies-app-client
+    ports:
+      - "4201:4200"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  dp:
+
+networks:
+  app_network:
