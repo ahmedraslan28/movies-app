@@ -57,6 +57,7 @@
 2. Create the MySQL database 
     ```sh
     Create a database named movieApp in your MySQL server.
+    CREATE DATABASE movieApp ;
     ```
 
 3. Set up database configuration in application.properties:
@@ -87,5 +88,6 @@
 7. access the app
   * Frontend: http://localhost:4200
   * Backend: http://localhost:8080
-
+  * admin account {email: admin@fawry.com, password: fawry}
+  * user account  {email: user@fawry.com, password: fawry}
 
